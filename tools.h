@@ -97,6 +97,7 @@ namespace tools {
 	}
 	
 	//C_MAX *********************************************
+  // funkcja moze zwracac policzony czas dzialania
 	const short c_max(unsigned const& zad_length, std::vector< std::vector<unsigned> > const& zad) {
 		
 		unsigned long c_max;
