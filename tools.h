@@ -8,18 +8,17 @@ namespace tools {
 
 	//PAUSE *********************************************
 	const void pause() {
-		do {
-			std::cout << "\n" << "Press the Enter key to continue.";
-		} while (std::cin.get() != '\n');
+		do std::cout << std::endl << std::endl << "Press the Enter key to continue...";
+		while (std::cin.get() != '\n');
 	}
 
 	//LOAD *********************************************
-	const int load(unsigned& zad_length, std::vector< std::vector<int> > &zad) {
+	const short load(unsigned& zad_length, std::vector<std::vector<unsigned> >& zad) {
 		std::ifstream file;
 		file.open("dane.txt", std::ios::in);
 		
 		if (file.fail()) {
-			std::cerr << "File didn't open properly within tools::load()";
+			std::cerr << std::endl << "File didn't open properly within tools::load()";
 			return 1;
 		}
 		
@@ -30,7 +29,7 @@ namespace tools {
 			file >> zad_length;
 			
 			while (counter <= zad_length) {
-				std::vector<int> temp;
+				std::vector<unsigned> temp;
 				file >> r;
 				file >> p;
 				file >> q;
@@ -47,40 +46,77 @@ namespace tools {
    		return 0;
     	}
     	
-		std::cerr << "Unidentified error within tools::load()";
+		std::cerr << std::endl << "Unidentified error within tools::load()";
 		return -1;
 	}
-	
-	const int save(std::vector< std::vector<int> > const &zad) {
+
+	//SAVE *********************************************
+	const short save(std::vector< std::vector<unsigned> > const& zad) {
 		std::ofstream file;
 		file.open("posortowane.txt", std::ios::out);
 	
 		if (file.fail()) {
-			std::cerr << "File didn't open properly within tools::save()";
+			std::cerr << std::endl << "File didn't open properly within tools::save()";
 			return 1;
 		}
 	
 		if (file.is_open()) {
-		
-			for (int i=0; i < zad.size(); ++i){
-				for (int j=1; j < zad[1].size(); ++j){
+			for (unsigned i=0; i < zad.size(); ++i){
+				for (unsigned j=1; j < zad[i].size(); ++j){
 					file << zad[i][j];
 					file << ' ';
 				}
 				file << std::endl;
 			}
+		
 		return 0;
 		}
 		
-		std::cerr << "Unidentified error within tools::save()";
+		
+		std::cerr << std::endl << "Unidentified error within tools::save()";
+		return -1;
+	}
+
+	//CLEAN *********************************************
+	const short clean(unsigned& zad_length, std::vector< std::vector<unsigned> >& zad) {
+		
+		for (unsigned i=0; i < zad_length; ++i) {
+			zad[i].clear();
+		}
+		zad.clear();
+		zad_length = 0;
+		
+		if(zad.empty() && zad_length == 0) return 0;
+		else {
+			std::cerr << std::endl << "Vector is not empty within tools::clean()";
+			return 1;
+		}
+		
+		std::cerr << std::endl << "Unidentified error within tools::clean()";
 		return -1;
 	}
 	
 	//C_MAX *********************************************
-	const int c_max(unsigned& const zad_length, std::vector< std::vector<int> > const &zad) {
+	const short c_max(unsigned const& zad_length, std::vector< std::vector<unsigned> > const& zad) {
 		
+		unsigned long c_max;
+		unsigned i;
+		unsigned j;
 		
-		return 0;
+		for (i=0; i < zad.size(); ++i) {
+			for (j=1; j < zad[i].size(); ++j) {
+				/* tutaj napisz funkcje liczaca c_max. Zrobilem ci cos co przelatuje przez wszystkie elementy wektora*/;
+			}
+		}
+		
+		if (i-- == zad.size() && j == zad[1].size() ) return 0;
+		else {
+			std::cerr << std::endl << "Vector was not fully checked within c_max()";
+			return 1;
+		}
+		
+		std::cerr << std::endl << "Unidentified error within tools::c_max()";
+		return -1;
 	}
 	
 }
