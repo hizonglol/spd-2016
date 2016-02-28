@@ -102,14 +102,15 @@ namespace tools {
 	long c_max(unsigned const& zad_length, std::vector< std::vector<unsigned> > const& zad) {
 		
 	// musialem zmienic typ c_max i t_p do uzycia w funkcji max()	
-		unsigned c_max = 0;
-		unsigned t_p = 0;
+	// edit: juz poprawione : 3
+		unsigned long c_max = 0;
+		unsigned long t_p = 0;
 		unsigned i;
 	
 	// liczy zgodnie z danymi na stronie
 		for (i=0; i < zad.size(); ++i) {
-			t_p = std::max(t_p,zad[i][1]) + zad[i][2];
-			c_max = std::max(t_p + zad[i][3],c_max);
+			t_p = std::max<unsigned long>(t_p,zad[i][1]) + zad[i][2];
+			c_max = std::max<unsigned long>(t_p + zad[i][3], c_max);
 		}
 		
 		if (i-- == zad.size() ) return c_max;
