@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <algorithm>
 
 namespace tools {
 
@@ -97,22 +98,25 @@ namespace tools {
 	}
 	
 	//C_MAX *********************************************
-	const short c_max(unsigned const& zad_length, std::vector< std::vector<unsigned> > const& zad) {
+    // funkcja zaraca calkowity czas dzialania dla podanego wektora
+	long c_max(unsigned const& zad_length, std::vector< std::vector<unsigned> > const& zad) {
 		
-		unsigned long c_max;
+	// musialem zmienic typ c_max i t_p do uzycia w funkcji max()	
+	// edit: juz poprawione : 3
+		unsigned long c_max = 0;
+		unsigned long t_p = 0;
 		unsigned i;
-		unsigned j;
-		
+	
+	// liczy zgodnie z danymi na stronie
 		for (i=0; i < zad.size(); ++i) {
-			for (j=1; j < zad[i].size(); ++j) {
-				/* tutaj napisz funkcje liczaca c_max. Zrobilem ci cos co przelatuje przez wszystkie elementy wektora*/;
-			}
+			t_p = std::max<unsigned long>(t_p,zad[i][1]) + zad[i][2];
+			c_max = std::max<unsigned long>(t_p + zad[i][3], c_max);
 		}
 		
-		if (i-- == zad.size() && j == zad[1].size() ) return 0;
+		if (i-- == zad.size() ) return c_max;
 		else {
 			std::cerr << std::endl << "Vector was not fully checked within c_max()";
-			return 1;
+			return -2;
 		}
 		
 		std::cerr << std::endl << "Unidentified error within tools::c_max()";
