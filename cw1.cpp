@@ -9,6 +9,8 @@ using namespace std;
 /* zrodla do poczytania
 
 http://dominik.zelazny.staff.iiar.pwr.wroc.pl/pliki/spd/zad1/Zadanie_1.pdf
+algorytmy ze strony Smutnickiego:
+http://czeslaw.smutnicki.staff.iiar.pwr.wroc.pl/sterowanie%20procesami%20dyskretnymi/rpq.cpp
 
 */
 
