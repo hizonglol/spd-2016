@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <cstdlib>
 
 #include "tools.h"
 
@@ -17,7 +18,7 @@ int main() {
 
 	tools::load(zad1_length, zad1);
 	tools::save(zad1);
-	tools::c_max(zad1_length, zad1);
+	cout << "Czas calkowity: " << tools::c_max(zad1_length, zad1) << endl;
 	tools::clean(zad1_length, zad1);
 	
 	tools::pause();
