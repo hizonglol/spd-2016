@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <string>
 
 namespace tools {
 
@@ -14,9 +15,9 @@ namespace tools {
 	}
 
 	//LOAD *********************************************
-	const short load(unsigned& zad_length, std::vector<std::vector<unsigned> >& zad) {
+	const short load(unsigned& zad_length, std::vector<std::vector<unsigned> >& zad, std::string wejscie) {
 		std::ifstream file;
-		file.open("dane.txt", std::ios::in);
+		file.open(wejscie.c_str(), std::ios::in);
 		
 		if (file.fail()) {
 			std::cerr << std::endl << "File didn't open properly within tools::load()";
@@ -77,6 +78,17 @@ namespace tools {
 		std::cerr << std::endl << "Unidentified error within tools::save()";
 		return -1;
 	}
+	
+	const short print(std::vector< std::vector<unsigned> > const& zad) {
+
+		for (unsigned i=0; i < zad.size(); ++i){
+			std::cout << zad[i][0];
+			std::cout << ' ';
+		}
+		std::cout << std::endl;
+		
+		return 0;
+	}
 
 	//CLEAN *********************************************
 	const short clean(unsigned& zad_length, std::vector< std::vector<unsigned> >& zad) {
@@ -121,6 +133,96 @@ namespace tools {
 		
 		std::cerr << std::endl << "Unidentified error within tools::c_max()";
 		return -1;
+	}
+	
+	struct compare1 {
+        bool operator()(std::vector<unsigned> const& t1, std::vector<unsigned> const& t2) {
+           	return t1[4] < t2[4];
+        }
+   	};
+   	
+   	struct compare2 {
+   		bool operator()(std::vector<unsigned> const& t1, std::vector<unsigned> const& t2) {
+           	return t1[1] < t2[1];
+        }
+	};
+	
+	struct compare3 {
+   		bool operator()(std::vector<unsigned> const& t1, std::vector<unsigned> const& t2) {
+           	return (t1[1]+t1[3]) < (t2[1]+t2[3]);
+        }
+	};
+	
+	int sort_1(std::vector< std::vector<unsigned> > & zad) {
+		
+		for (unsigned i=0; i < zad.size(); ++i) {
+			zad[i].push_back(zad[i][1]-zad[i][3]);
+		}
+		
+		std::sort(zad.begin(), zad.end(), compare1());
+		
+		return -1;
+	}
+	
+	int sort_2(std::vector< std::vector<unsigned> > & zad) {
+		
+		std::sort(zad.begin(), zad.end(), compare2());
+		
+		return -1;
+	}
+	
+	int sort_3(std::vector< std::vector<unsigned> > & zad) {
+		
+		std::sort(zad.begin(), zad.end(), compare3());
+		
+		return -1;
+	}
+	
+	int sort_schrage (unsigned const& zad_length, std::vector< std::vector<unsigned> > & to_sort, std::vector< std::vector<unsigned> > & sorted) {
+		
+		// sorted - wektor posortowany (wynikowy)
+		std::vector< std::vector<unsigned> > temp; // wektor tymczasowy z zadaniami gotowymi do rozpoczecia
+		int i = 1;
+		int t = 0;
+		int c_max = 0;
+		int q_max = 0;
+		int q_max_position = 0;
+		sort_2(to_sort); //sortowanie wektora wejsciowego wzgledem czasu r
+
+		while (!to_sort.empty() || !temp.empty()) {
+			for (int j = 0; j < to_sort.size(); ++j) {
+				if (to_sort[j][1] <= c_max){
+					temp.push_back(to_sort[j]);
+					to_sort.erase(to_sort.begin() + j);
+					j--;
+				}
+			}
+
+			if (temp.empty()) {
+				temp.push_back(to_sort[0]);
+				to_sort.erase(to_sort.begin());
+			}
+			
+			std::cout << "Dlugosc wektora temp: " << temp.size() << std::endl;
+			std::cout << "Dlugosc wektora to_sort: " << to_sort.size() << std::endl;
+			
+			/* Przeszukiwanie wektora temp w celu znalezienia zadania z najdluzszym czasem q  */
+			q_max = 0; // najwiekszy czas q
+			q_max_position = 0; // pozycja zadania z najwiekszym czasem q
+			
+			for (int j = 0; j < temp.size(); ++j) {
+				if (temp[j][3] > q_max){
+				q_max = temp[j][3];
+				q_max_position = j;
+				}
+			}
+			
+			c_max = c_max + temp[q_max_position][2]; // zwiekszenie czasu
+			sorted.push_back(temp[q_max_position]); // wlozenie zadania do wektora posortowanego
+			temp.erase(temp.begin() + q_max_position); // zadanie przestaje miec status "gotowe"		
+			
+		}
+		return 0;
 	}
 	
 }
