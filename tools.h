@@ -225,6 +225,51 @@ namespace tools {
 		return 0;
 	}
 	
+	
+	/* SHRAGE PRZEPISANY */
+	struct compare_r {
+        bool operator()(std::vector<unsigned> const& t1, std::vector<unsigned> const& t2) {
+           	return t1[1] < t2[1];
+        }
+   	};
+   	
+	struct compare_q {
+        bool operator()(std::vector<unsigned> const& t1, std::vector<unsigned> const& t2) {
+           	return t1[3] > t2[3];
+        }
+   	};
+	
+	int sort_schrage (unsigned const& zad_length, std::vector< std::vector<unsigned> > & to_sort, std::vector< std::vector<unsigned> > & sorted) {
+		int t = 0;
+		int k = 0;
+		int c_max = 0;
+		std::vector<std::vector<unsigned> > pi;
+		
+		std::priority_queue <std::vector<unsigned>, std::vector< std::vector<unsigned>, compare_r()> N;
+		std::priority_queue <std::vector<unsigned>, std::vector< std::vector<unsigned>, compare_q()> G;
+		
+		while (G.size() || N.size()) {
+			
+			while (N.size() && N.top()[1] < t) {
+				G.push(N.pop());
+			}
+			
+			if (!G.size()) {
+				t = N.top()[1];
+				// i tutaj nie wiem co zrobic, jak niby przejsc do 3?
+			}
+			
+			
+			k = k + 1;
+			t = t + G.top()[2];
+			c_max = std::max<int>(c_max, t + G.top()[3]);
+			pi.push_back(G.pop());
+		}
+		
+		
+		return 0;	
+	}
+	
 }
 
 #endif //TOOLS_H_INCLUDED
