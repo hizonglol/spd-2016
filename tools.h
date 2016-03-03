@@ -249,6 +249,11 @@ namespace tools {
 		std::priority_queue <std::vector<unsigned>, std::vector< std::vector<unsigned> >, compare_r> N;
 		std::priority_queue <std::vector<unsigned>, std::vector< std::vector<unsigned> >, compare_q> G;
 		
+		while (sorted.size()) {
+			N.push(sorted.back());
+			sorted.pop_back();
+		}
+		
 		while (G.size() || N.size()) {
 			
 			while (N.size() && N.top()[1] < t) {
@@ -271,6 +276,9 @@ namespace tools {
 			pi.push_back(G.top());
 			G.pop();
 		}
+		
+
+		sorted = pi;
 	
 		return 0;	
 	}
