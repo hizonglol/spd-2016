@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <queue>
 #include <string>
 
 namespace tools {
@@ -239,34 +240,38 @@ namespace tools {
         }
    	};
 	
-	int sort_schrage (unsigned const& zad_length, std::vector< std::vector<unsigned> > & to_sort, std::vector< std::vector<unsigned> > & sorted) {
+	int sort_schrage2 (unsigned const& zad_length, std::vector< std::vector<unsigned> > & to_sort, std::vector< std::vector<unsigned> > & sorted) {
 		int t = 0;
 		int k = 0;
 		int c_max = 0;
 		std::vector<std::vector<unsigned> > pi;
 		
-		std::priority_queue <std::vector<unsigned>, std::vector< std::vector<unsigned>, compare_r()> N;
-		std::priority_queue <std::vector<unsigned>, std::vector< std::vector<unsigned>, compare_q()> G;
+		std::priority_queue <std::vector<unsigned>, std::vector< std::vector<unsigned> >, compare_r> N;
+		std::priority_queue <std::vector<unsigned>, std::vector< std::vector<unsigned> >, compare_q> G;
 		
 		while (G.size() || N.size()) {
 			
 			while (N.size() && N.top()[1] < t) {
-				G.push(N.pop());
+				G.push(N.top());
+				N.pop();
 			}
 			
-			if (!G.size()) {
-				t = N.top()[1];
-				// i tutaj nie wiem co zrobic, jak niby przejsc do 3?
-			}
-			
+			do {
+			   	t = N.top()[1];
+			   	
+				while (N.size() && N.top()[1] < t) {
+					G.push(N.top());
+					N.pop();
+				}
+			} while (!G.size());
 			
 			k = k + 1;
 			t = t + G.top()[2];
 			c_max = std::max<int>(c_max, t + G.top()[3]);
-			pi.push_back(G.pop());
+			pi.push_back(G.top());
+			G.pop();
 		}
-		
-		
+	
 		return 0;	
 	}
 	
