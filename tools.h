@@ -135,112 +135,23 @@ namespace tools {
 		std::cerr << std::endl << "Unidentified error within tools::c_max()";
 		return -1;
 	}
-	
-	struct compare1 {
-        bool operator()(std::vector<unsigned> const& t1, std::vector<unsigned> const& t2) {
-           	return t1[4] < t2[4];
-        }
-   	};
-   	
-   	struct compare2 {
-   		bool operator()(std::vector<unsigned> const& t1, std::vector<unsigned> const& t2) {
-           	return t1[1] < t2[1];
-        }
-	};
-	
-	struct compare3 {
-   		bool operator()(std::vector<unsigned> const& t1, std::vector<unsigned> const& t2) {
-           	return (t1[1]+t1[3]) < (t2[1]+t2[3]);
-        }
-	};
-	
-	int sort_1(std::vector< std::vector<unsigned> > & zad) {
-		
-		for (unsigned i=0; i < zad.size(); ++i) {
-			zad[i].push_back(zad[i][1]-zad[i][3]);
-		}
-		
-		std::sort(zad.begin(), zad.end(), compare1());
-		
-		return -1;
-	}
-	
-	int sort_2(std::vector< std::vector<unsigned> > & zad) {
-		
-		std::sort(zad.begin(), zad.end(), compare2());
-		
-		return -1;
-	}
-	
-	int sort_3(std::vector< std::vector<unsigned> > & zad) {
-		
-		std::sort(zad.begin(), zad.end(), compare3());
-		
-		return -1;
-	}
-	
-	int sort_schrage (unsigned const& zad_length, std::vector< std::vector<unsigned> > & to_sort, std::vector< std::vector<unsigned> > & sorted) {
-		
-		// sorted - wektor posortowany (wynikowy)
-		std::vector< std::vector<unsigned> > temp; // wektor tymczasowy z zadaniami gotowymi do rozpoczecia
-		int i = 1;
-		int t = 0;
-		int c_max = 0;
-		int q_max = 0;
-		int q_max_position = 0;
-		sort_2(to_sort); //sortowanie wektora wejsciowego wzgledem czasu r
 
-		while (!to_sort.empty() || !temp.empty()) {
-			for (int j = 0; j < to_sort.size(); ++j) {
-				if (to_sort[j][1] <= c_max){
-					temp.push_back(to_sort[j]);
-					to_sort.erase(to_sort.begin() + j);
-					j--;
-				}
-			}
-
-			if (temp.empty()) {
-				temp.push_back(to_sort[0]);
-				to_sort.erase(to_sort.begin());
-			}
-			
-			std::cout << "Dlugosc wektora temp: " << temp.size() << std::endl;
-			std::cout << "Dlugosc wektora to_sort: " << to_sort.size() << std::endl;
-			
-			/* Przeszukiwanie wektora temp w celu znalezienia zadania z najdluzszym czasem q  */
-			q_max = 0; // najwiekszy czas q
-			q_max_position = 0; // pozycja zadania z najwiekszym czasem q
-			
-			for (int j = 0; j < temp.size(); ++j) {
-				if (temp[j][3] > q_max){
-				q_max = temp[j][3];
-				q_max_position = j;
-				}
-			}
-			
-			c_max = c_max + temp[q_max_position][2]; // zwiekszenie czasu
-			sorted.push_back(temp[q_max_position]); // wlozenie zadania do wektora posortowanego
-			temp.erase(temp.begin() + q_max_position); // zadanie przestaje miec status "gotowe"		
-			
-		}
-		return 0;
-	}
 	
-	
-	/* SHRAGE PRZEPISANY */
+	/* komparatory do Schrage */
 	struct compare_r {
         bool operator()(std::vector<unsigned> const& t1, std::vector<unsigned> const& t2) {
-           	return t1[1] < t2[1];
+           	return t1[1] > t2[1];
         }
    	};
    	
 	struct compare_q {
         bool operator()(std::vector<unsigned> const& t1, std::vector<unsigned> const& t2) {
-           	return t1[3] > t2[3];
+           	return t1[3] < t2[3];
         }
    	};
 	
-	int sort_schrage2 (unsigned const& zad_length, std::vector< std::vector<unsigned> > & to_sort, std::vector< std::vector<unsigned> > & sorted) {
+	/* schrage zmieniajacy sorted i zwracajacy czas */
+	int schrage (unsigned const& zad_length, std::vector< std::vector<unsigned> > & sorted) {
 		int t = 0;
 		int k = 0;
 		int c_max = 0;
@@ -249,40 +160,88 @@ namespace tools {
 		std::priority_queue <std::vector<unsigned>, std::vector< std::vector<unsigned> >, compare_r> N;
 		std::priority_queue <std::vector<unsigned>, std::vector< std::vector<unsigned> >, compare_q> G;
 		
-		while (sorted.size()) {
+		while (!sorted.empty()) {
 			N.push(sorted.back());
 			sorted.pop_back();
 		}
 		
-		while (G.size() || N.size()) {
+		while ((!G.empty()) || (!N.empty())) {
 			
-			while (N.size() && N.top()[1] < t) {
+			while ((!N.empty()) && (N.top()[1] <= t)) {
 				G.push(N.top());
 				N.pop();
 			}
 			
-			do {
-			   	t = N.top()[1];
-			   	
-				while (N.size() && N.top()[1] < t) {
-					G.push(N.top());
-					N.pop();
-				}
-			} while (!G.size());
-			
-			k = k + 1;
+			if (G.empty()) {
+				t = N.top()[1];
+			}
+			else {
 			t = t + G.top()[2];
 			c_max = std::max<int>(c_max, t + G.top()[3]);
 			pi.push_back(G.top());
 			G.pop();
+			}
 		}
 		
-
 		sorted = pi;
 	
-		return 0;	
+		return tools::c_max(zad_length, sorted);
 	}
 	
+	/* schrage zwracajacy czas *///*********************************************************
+	int preschrage (unsigned const& zad_length, std::vector< std::vector<unsigned> > const& sorted) {
+		int t = 0;
+		int k = 0;
+		int c_max = 0;
+		std::vector<std::vector<unsigned> > pi;
+		
+		std::priority_queue <std::vector<unsigned>, std::vector< std::vector<unsigned> >, compare_r> N;
+		std::priority_queue <std::vector<unsigned>, std::vector< std::vector<unsigned> >, compare_q> G;
+		
+		while (!sorted.empty()) {
+			N.push(sorted.back());
+		}
+		
+		while ((!G.empty()) || (!N.empty())) {
+			
+			while ((!N.empty()) && (N.top()[1] <= t)) {
+				G.push(N.top());
+				N.pop();
+			}
+			
+
+			if (G.empty()) {
+				t = N.top()[1];
+			}
+			else {
+			t = t + G.top()[2];
+			c_max = std::max<int>(c_max, t + G.top()[3]);
+			pi.push_back(G.top());
+			G.pop();
+			}
+		}
+	
+		return tools::c_max(zad_length, pi);
+	}
+	
+	/* carlier *///**************************************************************************
+	int sort_carlier(unsigned const& zad_length, std::vector< std::vector<unsigned> > & sorted, int& UB){
+		long int U, LB;
+		int n;
+		n = zad_length;
+		std::vector<std::vector<unsigned> > pi;
+		
+		while(1){
+			U = schrage(zad_length, sorted);
+			if(U < UB){
+				UB = U;
+				pi = sorted;
+			} 
+			return U;
+		}
+		
+		return -1;
+	}
 }
 
 #endif //TOOLS_H_INCLUDED
