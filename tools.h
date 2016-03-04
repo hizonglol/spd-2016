@@ -228,17 +228,54 @@ namespace tools {
 	int sort_carlier(unsigned const& zad_length, std::vector< std::vector<unsigned> > & sorted, int& UB){
 		long int U, LB;
 		int n;
+		int temp_r;
+		int temp_q;
 		n = zad_length;
 		std::vector<std::vector<unsigned> > pi;
 		
-		while(1){
-			U = schrage(zad_length, sorted);
-			if(U < UB){
-				UB = U;
-				pi = sorted;
-			} 
-			return U;
+		//1
+		U = schrage(zad_length, sorted);
+		//2
+		if(U < UB){
+			UB = U;
+			pi = sorted;
 		}
+		//3
+		
+		//4
+		if (/* c nie istnieje*/) return 0;
+		//5
+		
+		//6
+		// temp_r = c[1];
+		// tymczasowa modyfikacja czasu przygotowania w zadaniu c
+		// c[1] = std::max(c[1], r_prim + p_prim);
+		//7
+		LB = preschrage(zad_length, sorted);
+		
+		//8
+		if (LB < UB) ;
+		//9
+		carlier(zad_length, sorted, UB);
+		//10
+		// przywracany oryginalny czas przygotowania w zadaniu c
+		// c[1] = temp_r;
+		
+		//11
+		// temp_q = c[3];
+		// tymczasowa modyfikacja czasu stygniecia w zadaniu c
+		// c[3] = std::max(c[3], q_prim + p_prim);
+		//12
+		LB = preshrage(zad_length, sorted);
+		//13
+		if (LB < UB) ;
+		//14
+		carlier(zad_length, sorted, UB);
+		//15
+		//przywracany oryginalny czas stygniecia w zadaniu c
+		// c[3] = temp_q;
+		return U;
+		
 		
 		return -1;
 	}
