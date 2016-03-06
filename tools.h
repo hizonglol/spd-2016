@@ -9,13 +9,13 @@
 
 namespace tools {
 
-	//PAUSE *********************************************
+	//PAUSE *****************************************************************************************
 	const void pause() {
 		do std::cout << std::endl << std::endl << "Press the Enter key to continue...";
 		while (std::cin.get() != '\n');
 	}
 
-	//LOAD *********************************************
+	//LOAD ******************************************************************************************
 	const short load(unsigned& zad_length, std::vector<std::vector<unsigned> >& zad, std::string wejscie) {
 		std::ifstream file;
 		file.open(wejscie.c_str(), std::ios::in);
@@ -53,7 +53,7 @@ namespace tools {
 		return -1;
 	}
 
-	//SAVE *********************************************
+	//SAVE ******************************************************************************************
 	const short save(std::vector< std::vector<unsigned> > const& zad) {
 		std::ofstream file;
 		file.open("posortowane.txt", std::ios::out);
@@ -80,6 +80,7 @@ namespace tools {
 		return -1;
 	}
 	
+	//PRINT *****************************************************************************************
 	const short print(std::vector< std::vector<unsigned> > const& zad) {
 
 		for (unsigned i=0; i < zad.size(); ++i){
@@ -91,7 +92,7 @@ namespace tools {
 		return 0;
 	}
 
-	//CLEAN *********************************************
+	//CLEAN *****************************************************************************************
 	const short clean(unsigned& zad_length, std::vector< std::vector<unsigned> >& zad) {
 		
 		for (unsigned i=0; i < zad_length; ++i) {
@@ -110,17 +111,13 @@ namespace tools {
 		return -1;
 	}
 	
-	//C_MAX *********************************************
-    // funkcja zaraca calkowity czas dzialania dla podanego wektora
+	//C_MAX *****************************************************************************************
 	long c_max(unsigned const& zad_length, std::vector< std::vector<unsigned> > const& zad) {
 		
-	// musialem zmienic typ c_max i t_p do uzycia w funkcji max()	
-	// edit: juz poprawione : 3
 		unsigned long c_max = 0;
 		unsigned long t_p = 0;
 		unsigned i;
 	
-	// liczy zgodnie z danymi na stronie
 		for (i=0; i < zad.size(); ++i) {
 			t_p = std::max<unsigned long>(t_p,zad[i][1]) + zad[i][2];
 			c_max = std::max<unsigned long>(t_p + zad[i][3], c_max);
@@ -137,7 +134,7 @@ namespace tools {
 	}
 
 	
-	/* komparatory do Schrage */
+	/* komparatory do Schrage *///*******************************************************************
 	struct compare_r {
         bool operator()(std::vector<unsigned> const& t1, std::vector<unsigned> const& t2) {
            	return t1[1] > t2[1];
@@ -150,7 +147,7 @@ namespace tools {
         }
    	};
 	
-	/* schrage zmieniajacy sorted i zwracajacy czas */
+	/* schrage zmieniajacy sorted i zwracajacy czas *///*********************************************
 	int schrage (unsigned const& zad_length, std::vector< std::vector<unsigned> > & sorted) {
 		int t = 0;
 		int k = 0;
@@ -188,7 +185,7 @@ namespace tools {
 		return tools::c_max(zad_length, sorted);
 	}
 	
-	/* schrage zwracajacy czas *///*********************************************************
+	/* schrage zwracajacy czas *///******************************************************************
 	int preschrage (unsigned const& zad_length, std::vector< std::vector<unsigned> > const& sorted) {
 		int t = 0;
 		int k = 0;
@@ -224,58 +221,105 @@ namespace tools {
 		return tools::c_max(zad_length, pi);
 	}
 	
-	/* carlier *///**************************************************************************
-	int sort_carlier(unsigned const& zad_length, std::vector< std::vector<unsigned> > & sorted, int& UB){
+	//TO TRZEBA DOKONCZYC
+	/* wyznaczanie a i b *///************************************************************************
+	int set_a_b_index(unsigned const& n, std::vector<std::vector<unsigned> > const& pi, long int const& U, int & a_index, int & b_index){
+		a_index = 0;
+		b_index = 0;
+		int j;
+		int sum;
+		
+		int c_pi_temp = pi[1][1] + pi[1][2];
+		
+		for (j=(n-1); j>=0; --j){
+			if ((c_pi_temp + pi[j][3]) <= U){
+				// napisac jak zwieksza sie c_pi_temp
+				b_index = j;
+				break;
+			}
+		}
+		
+		// tutaj liczymy sume p od pi[0] do pi[b]
+		for (j=0; j<n; ++j){
+			sum -= pi[j][2];
+			if (pi[j][1] + sum + pi[b_index][3] >= U) {
+				a_index = j;
+				break;
+			}
+		}
+	}
+	
+	/* wyznaczanie c *///****************************************************************************
+	bool c_not_exists(unsigned const& n, std::vector<std::vector<unsigned> > const& pi, int const& a_index, int const& b_index, int& c_index) {
+		bool c_not_exists = true;
+		
+		for (int j=a_index; j<=b_index; ++j){
+			if (pi[j][3] < pi[b_index][3]){
+				c_not_exists = false;
+				c_index = j;
+			}
+		}
+		
+		return c_not_exists;
+	}
+	
+	/* carlier *///**********************************************************************************
+	int sort_carlier(unsigned const& n, std::vector< std::vector<unsigned> > & sorted, int& UB){
 		long int U, LB;
-		int n;
-		int temp_r;
-		int temp_q;
-		n = zad_length;
+		int r_old, q_old;
+		int r_prim, p_prim, q_prim;
+		int a_index, b_index, c_index;
+		
 		std::vector<std::vector<unsigned> > pi;
 		
 		//1
-		U = schrage(zad_length, sorted);
+		U = schrage(n, sorted);
+		
 		//2
 		if(U < UB){
 			UB = U;
 			pi = sorted;
 		}
-		//3
 		
-		//4
-		if (/* c nie istnieje*/) return 0;
+		//pierwsza polowa 3
+		set_a_b_index(n, pi, U, a_index, b_index);
+		
+		//4 i druga polowa 3
+		if (c_not_exists(n, pi, a_index, b_index, c_index)) return 0;
+		
 		//5
+		p_prim = 0;
+		for (int i=(c_index+1); i<b_index; ++i) {
+			if (pi[i][1] < r_prim) r_prim = pi[i][1];
+			if (pi[i][3] < q_prim) q_prim = pi[i][3];
+			p_prim += pi[i][2];
+		}
 		
 		//6
-		// temp_r = c[1];
-		// tymczasowa modyfikacja czasu przygotowania w zadaniu c
-		// c[1] = std::max(c[1], r_prim + p_prim);
+		r_old = pi[c_index][1];
+		pi[c_index][1] = std::max<int>(pi[c_index][1], r_prim+p_prim);
+		
 		//7
-		LB = preschrage(zad_length, sorted);
+		LB = preschrage(n, sorted);
 		
 		//8
-		if (LB < UB) ;
-		//9
-		carlier(zad_length, sorted, UB);
+		if (LB < UB) /*9*/ sort_carlier(n, sorted, UB);
+		
 		//10
-		// przywracany oryginalny czas przygotowania w zadaniu c
-		// c[1] = temp_r;
+		pi[c_index][1] = r_old;
 		
 		//11
-		// temp_q = c[3];
-		// tymczasowa modyfikacja czasu stygniecia w zadaniu c
-		// c[3] = std::max(c[3], q_prim + p_prim);
-		//12
-		LB = preshrage(zad_length, sorted);
-		//13
-		if (LB < UB) ;
-		//14
-		carlier(zad_length, sorted, UB);
-		//15
-		//przywracany oryginalny czas stygniecia w zadaniu c
-		// c[3] = temp_q;
-		return U;
+		q_old = pi[c_index][3];
+		pi[c_index][3] = std::max<int>(pi[c_index][3], q_prim+p_prim);
 		
+		//12
+		LB = preschrage(n, sorted);
+		
+		//13
+		if (LB < UB) /*14*/ sort_carlier(n, sorted, UB);
+		
+		//15
+		pi[c_index][3] = q_old;
 		
 		return -1;
 	}
