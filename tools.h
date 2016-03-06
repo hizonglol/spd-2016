@@ -111,6 +111,10 @@ namespace tools {
 		return -1;
 	}
 	
+	/*
+	c_max() wykonane wg algorytmu podanego na laboratorium nr 1
+	*/
+	
 	//C_MAX *****************************************************************************************
 	long c_max(unsigned const& zad_length, std::vector< std::vector<unsigned> > const& zad) {
 		
@@ -146,6 +150,11 @@ namespace tools {
            	return t1[3] < t2[3];
         }
    	};
+	
+	/*
+	schrage() oraz preshrage() napisany na podstawie algorytmu podanego na stronie:
+	http://dominik.zelazny.staff.iiar.pwr.wroc.pl/materialy/Algorytm_Schrage.pdf
+	*/
 	
 	/* schrage zmieniajacy sorted i zwracajacy czas *///*********************************************
 	int schrage (unsigned const& zad_length, std::vector< std::vector<unsigned> > & sorted) {
@@ -221,6 +230,11 @@ namespace tools {
 		return tools::c_max(zad_length, pi);
 	}
 	
+	/*
+	set_a_b_index(), c_not_exists(), carlier() napisane na podstawie algorytmu podanego na stronie:
+	http://dominik.zelazny.staff.iiar.pwr.wroc.pl/materialy/Algorytm_Carlier.pdf
+	*/
+	
 	//TO TRZEBA DOKONCZYC
 	/* wyznaczanie a i b *///************************************************************************
 	int set_a_b_index(unsigned const& n, std::vector<std::vector<unsigned> > const& pi, long int const& U, int & a_index, int & b_index){
@@ -264,7 +278,7 @@ namespace tools {
 	}
 	
 	/* carlier *///**********************************************************************************
-	int sort_carlier(unsigned const& n, std::vector< std::vector<unsigned> > & sorted, int& UB){
+	int carlier(unsigned const& n, std::vector< std::vector<unsigned> > & sorted, int& UB){
 		long int U, LB;
 		int r_old, q_old;
 		int r_prim, p_prim, q_prim;
@@ -303,7 +317,7 @@ namespace tools {
 		LB = preschrage(n, sorted);
 		
 		//8
-		if (LB < UB) /*9*/ sort_carlier(n, sorted, UB);
+		if (LB < UB) /*9*/ carlier(n, sorted, UB);
 		
 		//10
 		pi[c_index][1] = r_old;
@@ -316,7 +330,7 @@ namespace tools {
 		LB = preschrage(n, sorted);
 		
 		//13
-		if (LB < UB) /*14*/ sort_carlier(n, sorted, UB);
+		if (LB < UB) /*14*/ carlier(n, sorted, UB);
 		
 		//15
 		pi[c_index][3] = q_old;
