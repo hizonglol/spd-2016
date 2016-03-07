@@ -195,7 +195,7 @@ namespace tools {
 	}
 	
 	/* schrage zwracajacy czas *///******************************************************************
-	int preschrage (unsigned const& zad_length, std::vector< std::vector<unsigned> > const& sorted) {
+	int preschrage (unsigned const& zad_length, std::vector< std::vector<unsigned> > & sorted) {
 		int t = 0;
 		int k = 0;
 		int c_max = 0;
@@ -206,8 +206,9 @@ namespace tools {
 		
 		while (!sorted.empty()) {
 			N.push(sorted.back());
+			sorted.pop_back();
 		}
-		
+		std::cout << "Preshrage." << std::endl;
 		while ((!G.empty()) || (!N.empty())) {
 			
 			while ((!N.empty()) && (N.top()[1] <= t)) {
@@ -226,7 +227,7 @@ namespace tools {
 			G.pop();
 			}
 		}
-	
+		sorted = pi;
 		return tools::c_max(zad_length, pi);
 	}
 	
@@ -237,27 +238,47 @@ namespace tools {
 	
 	//TO TRZEBA DOKONCZYC
 	/* wyznaczanie a i b *///************************************************************************
-	int set_a_b_index(unsigned const& n, std::vector<std::vector<unsigned> > const& pi, long int const& U, int & a_index, int & b_index){
+	int set_a_b_c_index(unsigned const& n, std::vector<std::vector<unsigned> > const& pi, long int const& U, int & a_index, int & b_index, int & c_index){
 		a_index = 0;
 		b_index = 0;
-		int j;
+		c_index = 0;
+		int j, s;
 		int sum;
+		int t_p = 0;
+		int c_pi_temp = 0;
 		
-		int c_pi_temp = pi[1][1] + pi[1][2];
+		std::cout << "Robie indeksy b." << std::endl;
+	//	int c_pi_temp = pi[1][1] + pi[1][2];
 		
-		for (j=(n-1); j>=0; --j){
-			if ((c_pi_temp + pi[j][3]) <= U){
+		for (j=0; j<n; j++){
+			t_p = std::max<unsigned long>(t_p,pi[j][1]) + pi[j][2];
+			c_pi_temp = std::max<unsigned long>(t_p + pi[j][3], c_pi_temp);
+			if (c_pi_temp == U){
 				// napisac jak zwieksza sie c_pi_temp
+				std::cout << "Indeks b: "  << j << std::endl;
 				b_index = j;
+			}
+		//	c_pi_temp = c_pi_temp + pi[j][3];
+		}
+		
+		std::cout << "Robie indeksy a." << std::endl;
+		// tutaj liczymy sume p od pi[0] do pi[b]
+		
+		for (j=0; j<n; j++){
+			sum = 0;
+			for (s=j; s<=b_index; s++)	sum += pi[s][2];
+			if (pi[j][1] + sum + pi[b_index][3] == U) {
+			//	std::cout << "Czas rozpoczecia: " << pi[j][1] << "  Czas zsumowany: " << sum << "  Czas stygniecia: " << pi[b_index][3] << std::endl;
+				a_index = j;
+				std::cout << "Indeks a: " << a_index << std::endl;
 				break;
 			}
 		}
 		
-		// tutaj liczymy sume p od pi[0] do pi[b]
-		for (j=0; j<n; ++j){
-			sum -= pi[j][2];
-			if (pi[j][1] + sum + pi[b_index][3] >= U) {
-				a_index = j;
+		for (j=b_index; j>=a_index; j--){
+			if (pi[j][3] < pi[b_index][3]) {
+				c_index = j;
+				std::cout << "Indeks c: " << c_index << std::endl;
 				break;
 			}
 		}
@@ -285,22 +306,26 @@ namespace tools {
 		int a_index, b_index, c_index;
 		
 		std::vector<std::vector<unsigned> > pi;
+		//pi = sorted;
 		
+		std::cout << "Carlier inicjalizacja." << std::endl;
 		//1
 		U = schrage(n, sorted);
-		
+		std::cout << "Carlier inicjalizacja 2." << " Dlugosc sorted: " << sorted.size() << " Dlugosc pi: " << pi.size() << std::endl;
 		//2
 		if(U < UB){
 			UB = U;
 			pi = sorted;
 		}
-		
+		std::cout << "Carlier inicjalizacja 3." << std::endl;
 		//pierwsza polowa 3
-		set_a_b_index(n, pi, U, a_index, b_index);
+		std::cout << "Dlugosc pi przed indeksami " << pi.size() << std::endl;
+		set_a_b_c_index(n, pi, U, a_index, b_index, c_index);
+		std::cout << "Mam indeksy." << std::endl;
 		
 		//4 i druga polowa 3
 		if (c_not_exists(n, pi, a_index, b_index, c_index)) return 0;
-		
+		std::cout << "Krok 5." << std::endl;
 		//5
 		p_prim = 0;
 		for (int i=(c_index+1); i<b_index; ++i) {
@@ -308,16 +333,21 @@ namespace tools {
 			if (pi[i][3] < q_prim) q_prim = pi[i][3];
 			p_prim += pi[i][2];
 		}
-		
+		std::cout << "Krok 6." << std::endl;
 		//6
 		r_old = pi[c_index][1];
 		pi[c_index][1] = std::max<int>(pi[c_index][1], r_prim+p_prim);
 		
+		std::cout << "Krok 7." << std::endl;
 		//7
-		LB = preschrage(n, sorted);
-		
+		std::cout << "Dlugosc sorted: " << sorted.size() << std::endl;
+		LB = preschrage(n, pi);
+		std::cout << "Dlugosc sorted: " << sorted.size() << std::endl;
+					
+		std::cout << "Krok 8." << " Dlugosc sorted: " << sorted.size() <<std::endl;
 		//8
-		if (LB < UB) /*9*/ carlier(n, sorted, UB);
+		std::cout << LB << UB;
+		if (LB < UB) /*9*/ carlier(n, pi, UB);
 		
 		//10
 		pi[c_index][1] = r_old;
@@ -327,11 +357,16 @@ namespace tools {
 		pi[c_index][3] = std::max<int>(pi[c_index][3], q_prim+p_prim);
 		
 		//12
-		LB = preschrage(n, sorted);
+		LB = preschrage(n, pi);
 		
+		std::cout << "Krok 13." << std::endl;
 		//13
-		if (LB < UB) /*14*/ carlier(n, sorted, UB);
-		
+		if (LB < UB){
+			std::cout << "Krok 14." << std::endl;
+
+			 /*14*/ carlier(n, pi, UB);
+		}
+		std::cout << "Krok 15." << std::endl;
 		//15
 		pi[c_index][3] = q_old;
 		

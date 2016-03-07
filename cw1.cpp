@@ -35,12 +35,33 @@ int main() {
 	int U2 = 150000;
 	int U3 = 150000;
 	int U4 = 150000;
+	int suma;
 
 	tools::load(zad1_length, zad1, wejscie1);
 	//tools::schrage(zad1_length, zad1);
-	//cout << "Czas calkowity po sortowaniu Schrage'a 2: " << tools::c_max(zad1_length, zad1) << endl;
+	//cout << "Czas calkowity po sortowaniu Schrage'a: " << tools::c_max(zad1_length, zad1) << endl;
+	//tools::print(zad1);
 	tools::carlier(zad1_length, zad1, U1);
-	cout << "Czas Carliera: " << tools::c_max(zad1_length, zad1) << endl;
+	cout << "Czas Carliera dla danych 1: " << tools::c_max(zad1_length, zad1) << endl;
+	tools::print(zad1);
+	
+	tools::load(zad2_length, zad2, wejscie2);
+	tools::carlier(zad1_length, zad1, U2);
+	cout << "Czas Carliera dla danych 2: " << tools::c_max(zad2_length, zad2) << endl;
+	tools::print(zad2);
+	
+	tools::load(zad3_length, zad3, wejscie3);
+	tools::carlier(zad1_length, zad1, U3);
+	cout << "Czas Carliera dla danych 3: " << tools::c_max(zad3_length, zad3) << endl;
+	tools::print(zad3);
+	
+	tools::load(zad4_length, zad4, wejscie4);
+	tools::carlier(zad1_length, zad1, U4);
+	cout << "Czas Carliera dla danych 4: " << tools::c_max(zad4_length, zad4) << endl;
+	tools::print(zad4);
+
+	suma = tools::c_max(zad1_length, zad1) + tools::c_max(zad2_length, zad2) + tools::c_max(zad3_length, zad3) + tools::c_max(zad4_length, zad4);
+	cout << "Suma czasow: " << suma << endl;
 
 	tools::save(zad1);
 	tools::clean(zad1_length, zad1);
