@@ -159,7 +159,6 @@ namespace tools {
 	/* schrage *///**********************************************************************************
 	int schrage (unsigned const& zad_length, std::vector< std::vector<unsigned> > & sorted) {
 		int t = 0;
-		int k = 0;
 		int c_max = 0;
 		std::vector<std::vector<unsigned> > pi;
 		
@@ -182,7 +181,7 @@ namespace tools {
 				t = N.top()[1];
 			}
 			else {
-			t = t + G.top()[2];
+			t += G.top()[2];
 			c_max = std::max<int>(c_max, t + G.top()[3]);
 			pi.push_back(G.top());
 			G.pop();
@@ -197,19 +196,17 @@ namespace tools {
 	/* schrage z przerwaniami *///*******************************************************************
 	int preschrage (unsigned const& zad_length, std::vector< std::vector<unsigned> >const & sorted) {
 		int t = 0;
-		int k = 0;
-		int l = 0;
 		int c_max = 0;
 		std::vector<unsigned> task;
-		task.push_back(255565); task.push_back(0); task.push_back(0); task.push_back(1500000);
+		task.push_back(255565); task.push_back(0); task.push_back(0); task.push_back(255565);
 		
 		std::priority_queue <std::vector<unsigned>, std::vector< std::vector<unsigned> >, compare_r> N;
 		std::priority_queue <std::vector<unsigned>, std::vector< std::vector<unsigned> >, compare_q> G;
 		
-		while (!sorted.empty()) {
-			N.push(sorted.back());
+		for (int i = 0; i<zad_length; ++i) {
+			N.push(sorted[i]);
 		}
-		std::cout << "Preshrage." << std::endl;
+		
 		while ((!G.empty()) || (!N.empty())) {
 			
 			while ((!N.empty()) && (N.top()[1] <= t)) {
@@ -218,10 +215,10 @@ namespace tools {
 					task[2] = t - N.top()[1];
 					t = N.top()[1];
 				}
-				N.pop();
 				if (task[2] > 0) {
 					G.push(task);
 				}
+				N.pop();
 			}
 
 			if (G.empty()) {
@@ -243,7 +240,6 @@ namespace tools {
 	http://dominik.zelazny.staff.iiar.pwr.wroc.pl/materialy/Algorytm_Carlier.pdf
 	*/
 	
-	//TO TRZEBA DOKONCZYC
 	/* wyznaczanie a i b *///************************************************************************
 	int set_a_b_c_index(unsigned const& n, std::vector<std::vector<unsigned> > const& pi, long int const& U, int & a_index, int & b_index){
 		a_index = 0;
@@ -253,9 +249,10 @@ namespace tools {
 		int t_p = 0;
 		int c_pi_temp = 0;
 		
-		std::cout << "Robie indeksy b." << std::endl;
+		std::cout << "Wyznaczam b";
 		
 		for (j=0; j<n; j++){
+			std::cout << "J";
 			t_p = std::max<unsigned long>(t_p,pi[j][1]) + pi[j][2];
 			c_pi_temp = std::max<unsigned long>(t_p + pi[j][3], c_pi_temp);
 			if (c_pi_temp == U){
@@ -264,17 +261,22 @@ namespace tools {
 			}
 		}
 		
-		std::cout << "Robie indeksy a." << std::endl;
+		std::cout << "Wyznaczam a";
+		
+		sum = 0;
+		for (s=0; s<=b_index; s++)	sum += pi[s][2];
 		
 		for (j=0; j<n; j++){
-			sum = 0;
-			for (s=j; s<=b_index; s++)	sum += pi[s][2];
+			std::cout << "J!";
+			
 			if (pi[j][1] + sum + pi[b_index][3] == U) {
 			//	std::cout << "Czas rozpoczecia: " << pi[j][1] << "  Czas zsumowany: " << sum << "  Czas stygniecia: " << pi[b_index][3] << std::endl;
 				a_index = j;
 				std::cout << "Indeks a: " << a_index << std::endl;
 				break;
 			}
+			
+			sum -= pi[j][2];
 		}
 	}
 	
@@ -300,10 +302,9 @@ namespace tools {
 		int a_index, b_index, c_index;
 		
 		std::vector<std::vector<unsigned> > pi = sorted;
-		//pi = sorted;
 		
 		//1
-		U = schrage(n, sorted);
+		U = schrage(n, pi);
 		std::cout << "Carlier 1." << std::endl;
 		
 		//2
@@ -318,7 +319,7 @@ namespace tools {
 		std::cout << "Carlier 3." << std::endl;
 		
 		//4 i druga polowa 3
-		if (c_not_exists(n, pi, a_index, b_index, c_index)) return 0;
+		if (c_not_exists(n, pi, a_index, b_index, c_index)){ std::cout << "Nope."; return 0;}
 		std::cout << "Carlier 4." << std::endl;
 		
 		//5

@@ -6,12 +6,18 @@
 #include "tools.h"
 
 using namespace std;
-/* zrodla do poczytania
+/* jak powinno wyjsc dla tych danych:
+Schrage:
+1. 13981   
+2. 21529   
+3. 31683   
+4. 34444   
 
-http://dominik.zelazny.staff.iiar.pwr.wroc.pl/pliki/spd/zad1/Zadanie_1.pdf
-algorytmy ze strony Smutnickiego:
-http://czeslaw.smutnicki.staff.iiar.pwr.wroc.pl/sterowanie%20procesami%20dyskretnymi/rpq.cpp
-
+Carlier:
+1. 13862
+2. 20917
+3. 31343
+4. 33878
 */
 
 int main() {
@@ -31,20 +37,24 @@ int main() {
 	wejscie2 = "dane2.txt";
 	wejscie3 = "dane3.txt";
 	wejscie4 = "dane4.txt";
-	int U1 = 150000;
-	int U2 = 150000;
-	int U3 = 150000;
-	int U4 = 150000;
+	int U1 = 255565;
+	int U2 = 255565;
+	int U3 = 255565;
+	int U4 = 255565;
 	int suma;
 
 	tools::load(zad1_length, zad1, wejscie1);
 	//tools::schrage(zad1_length, zad1);
 	//cout << "Czas calkowity po sortowaniu Schrage'a: " << tools::c_max(zad1_length, zad1) << endl;
 	//tools::print(zad1);
-	tools::carlier(zad1_length, zad1, U1);
-	cout << "Czas Carliera dla danych 1: " << tools::c_max(zad1_length, zad1) << endl;
+	
+	//tools::carlier(zad1_length, zad1, U1);
+	//cout << "Czas Carliera dla danych 1: " << tools::c_max(zad1_length, zad1) << endl;
+	
+	cout << tools::preschrage(zad1_length,zad1) << endl;
 	tools::print(zad1);
 	
+	/*
 	tools::load(zad2_length, zad2, wejscie2);
 	tools::carlier(zad1_length, zad1, U2);
 	cout << "Czas Carliera dla danych 2: " << tools::c_max(zad2_length, zad2) << endl;
@@ -62,7 +72,7 @@ int main() {
 
 	suma = tools::c_max(zad1_length, zad1) + tools::c_max(zad2_length, zad2) + tools::c_max(zad3_length, zad3) + tools::c_max(zad4_length, zad4);
 	cout << "Suma czasow: " << suma << endl;
-
+*/
 	tools::save(zad1);
 	tools::clean(zad1_length, zad1);
 	
