@@ -22,37 +22,29 @@ Carlier:
 
 int main() {
 	vector<vector<unsigned> > zad1;
-	vector<vector<unsigned> > zad2;
-	vector<vector<unsigned> > zad3;
-	vector<vector<unsigned> > zad4;
+	//vector<vector<unsigned> > zad2;
+	//vector<vector<unsigned> > zad3;
+	//vector<vector<unsigned> > zad4;
 	unsigned zad1_length;
-	unsigned zad2_length;
-	unsigned zad3_length;
-	unsigned zad4_length;
-	string wejscie1;
-	string wejscie2;
-	string wejscie3;
-	string wejscie4;
-	wejscie1 = "dane1.txt";
-	wejscie2 = "dane2.txt";
-	wejscie3 = "dane3.txt";
-	wejscie4 = "dane4.txt";
-	int U1 = 255565;
-	int U2 = 255565;
-	int U3 = 255565;
-	int U4 = 255565;
-	int suma;
+	//unsigned zad2_length;
+	//unsigned zad3_length;
+	//unsigned zad4_length;
+	string wejscie1 = "dane1.txt";
+	//string wejscie2 = "dane2.txt";
+	//string wejscie3 = "dane3.txt";
+	//string wejscie4 = "dane4.txt";
+	unsigned U1 = 255565;
+	//unsigned U2, U3, U4;
+	//U4 = U3 = U2 = U1;
+	//unsigned suma;
 
 	tools::load(zad1_length, zad1, wejscie1);
-	//tools::schrage(zad1_length, zad1);
-	//cout << "Czas calkowity po sortowaniu Schrage'a: " << tools::c_max(zad1_length, zad1) << endl;
-	//tools::print(zad1);
 	
-	//tools::carlier(zad1_length, zad1, U1);
+	tools::carlier(zad1_length, zad1, U1);
 	//cout << "Czas Carliera dla danych 1: " << tools::c_max(zad1_length, zad1) << endl;
 	
-	cout << tools::preschrage(zad1_length,zad1) << endl;
-	tools::print(zad1);
+	//cout << tools::preschrage(zad1_length,zad1) << endl;
+	//tools::print(zad1);
 	
 	/*
 	tools::load(zad2_length, zad2, wejscie2);
@@ -70,11 +62,11 @@ int main() {
 	cout << "Czas Carliera dla danych 4: " << tools::c_max(zad4_length, zad4) << endl;
 	tools::print(zad4);
 
-	suma = tools::c_max(zad1_length, zad1) + tools::c_max(zad2_length, zad2) + tools::c_max(zad3_length, zad3) + tools::c_max(zad4_length, zad4);
+	suma = tools::c_max<unsigned>(zad1_length, zad1) + tools::c_max(zad2_length, zad2) + tools::c_max(zad3_length, zad3) + tools::c_max(zad4_length, zad4);
 	cout << "Suma czasow: " << suma << endl;
 */
-	tools::save(zad1);
-	tools::clean(zad1_length, zad1);
+	tools::save(zad1); //zapisujemy do pliku permutacje zadan
+	tools::clean(zad1_length, zad1); //sprzatamy wektory
 	
 	tools::pause();
 	return 0;
