@@ -142,14 +142,20 @@ namespace tools {
 	struct compare_r {
         bool operator()(std::vector<unsigned> const& t1, std::vector<unsigned> const& t2) {
            	return t1[1] > t2[1];
-        }
-   	};
+        	}
+   		};
+   	
+   	struct compare_p {
+   		bool operator()(std::vector<unsigned> const& t1, std::vector<unsigned> const& t2) {
+   			return t1[2] > t2[2];
+		   }
+	   };
    	
 	struct compare_q {
         bool operator()(std::vector<unsigned> const& t1, std::vector<unsigned> const& t2) {
            	return t1[3] < t2[3];
-        }
-   	};
+        	}
+   		};
 	
 	/*
 	schrage() oraz preshrage() napisany na podstawie algorytmu podanego na stronie:
@@ -381,6 +387,28 @@ namespace tools {
 		
 		return -1;
 	}
+
+	/* algorytm sorotowania data.2 *///*************************************************
+	int sort_data2(unsigned const& n, std::vector< std::vector<unsigned> > & tasks){
+		int c_first = 0;
+		
+		std::priority_queue <std::vector<unsigned>, std::vector< std::vector<unsigned> >, compare_p> min_p; //kolejka min(p)
+		
+		while (!tasks.empty()) {
+			min_p.push(tasks.back()); //wrzucamy zadania do kolejki min(r)
+			tasks.pop_back(); //kasujemy zadania do posortowania
+		}
+		while (!min_p.empty()) {
+			tasks.push_back(min_p.top()); //wrzucamy zadania do kolejki min(r)
+			min_p.pop(); //kasujemy zadania do posortowania
+		}
+	
+		
+		
+		return c_max(n, tasks);
+	}
+
+/* koniec namespace tools *///***********************************************************************
 }
 
 #endif //TOOLS_H_INCLUDED
