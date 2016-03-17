@@ -14,35 +14,47 @@ unsigned int F(const int n, const int pi[]);
 void main(void)
 { int i,n=15; unsigned int e;
 
-  for (i=1;i<=n;i++) { w[i]=1+random(5);
-		       p[i]=1+random(50);
-		       d[i]=random(5*n); }
+	for (i=1;i<=n;i++) {
+		w[i]=1+random(5);
+		p[i]=1+random(50);
+		d[i]=random(5*n);
+	}
 
-//  w[1]=2; w[2]=1; w[3]=3; w[4]=1;
-//  p[1]=5; p[2]=4; p[3]=6; p[4]=8;
-//  d[1]=8; d[2]=10; d[3]=14; d[4]=12;
+	//w[1]=2; w[2]=1; w[3]=3; w[4]=1;
+	//p[1]=5; p[2]=4; p[3]=6; p[4]=8;
+	//d[1]=8; d[2]=10; d[3]=14; d[4]=12;
 
-  pd(n,p,pi,e);
+	pd(n,p,pi,e);
 
 //  getch();
-  clrscr();
-  for (i=1;i<=n;i++) printf("%8d",pi[i]);
-  printf("\n%8u\n%8u\n",e,F(n,pi));
-  getch();
+	clrscr();
+	for (i=1;i<=n;i++) printf("%8d",pi[i]);
+	printf("\n%8u\n%8u\n",e,F(n,pi));
+	getch();
 }
 
 int pd(const int n, const int p[], int pi[], unsigned int &z) {
- 	unsigned long e,c,r=1uL<<n;
+	//indeks pomocniczy
+ 	unsigned long e;
+ 	//maska
+	unsigned long c;
+ 	//ile jest mozliwych kombinacji
+	unsigned long r=1uL<<n;
+ 	//wektor rozwiazan 2^n
   	unsigned int *G=new unsigned int [r];
+  	//indeks zadania wyznaczajacego minimum
   	unsigned short int *v=new unsigned short int [r];
   	//s moment czasowy
   	unsigned int s,k,a,t;
   	unsigned short int u;
 
+	//jesli nie zaalokowane
   	if (!G) { return -1; }
   	if (!v) { delete G; return -1; }
 
+	//zadanie poczatkowe
 	G[0]=0; v[0]=0;
+	
 	for (e=1;e<r;e++) {
  		s=0;
  		for (c=k=1;c<=e;c<<=1,k++) if (e&c) s+=p[k];
