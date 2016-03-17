@@ -64,18 +64,28 @@ int pd(const int n, const int p[], int pi[], unsigned int &z) {
     t=t+1;
   	}
 
-  t=n; z=G[--e];
-  while (t) {
-  pi[t--]=k=v[e];
-  e=e-(1uL<<(k-1)); }
+	t=n;
+	z=G[--e];
+  
+	while (t) {
+		pi[t--]=k=v[e];
+		e=e-(1uL<<(k-1));
+	}
 
-  delete G; delete v; return 0;
+	delete G;
+	delete v;
+	return 0;
 }
 
-unsigned int F(const int n, const int pi[])
-{ unsigned int s=0,t=0;
-  int j,k;
+unsigned int F(const int n, const int pi[]) {
+	unsigned int s=0,t=0;
+	int j,k;
 
-  for (j=1;j<=n;j++) { k=pi[j]; s+=p[k]; t+=w[k]*max(0,s-d[k]); }
-  return t;
+	for (j=1;j<=n;j++) {
+		k=pi[j];
+		s+=p[k];
+		t+=w[k]*max(0,s-d[k]);
+	}
+	
+	return t;
 }
