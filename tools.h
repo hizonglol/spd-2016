@@ -145,9 +145,15 @@ namespace tools {
         	}
    		};
    	
-   	struct compare_p {
+   	struct compare_p_min {
    		bool operator()(std::vector<unsigned> const& t1, std::vector<unsigned> const& t2) {
    			return t1[2] > t2[2];
+		   }
+	   };
+	   
+	struct compare_p_max {
+   		bool operator()(std::vector<unsigned> const& t1, std::vector<unsigned> const& t2) {
+   			return t1[2] < t2[2];
 		   }
 	   };
    	
@@ -390,9 +396,10 @@ namespace tools {
 
 	/* algorytm sorotowania data.2 *///*************************************************
 	int sort_data2(unsigned const& n, std::vector< std::vector<unsigned> > & tasks){
-		int c_first = 0;
+		std::vector< std::vector<unsigned> > temp;
 		
-		std::priority_queue <std::vector<unsigned>, std::vector< std::vector<unsigned> >, compare_p> min_p; //kolejka min(p)
+		std::priority_queue <std::vector<unsigned>, std::vector< std::vector<unsigned> >, compare_p_min> min_p; //kolejka min(p)
+		std::priority_queue <std::vector<unsigned>, std::vector< std::vector<unsigned> >, compare_p_max> max_p; //kolejka max(p)
 		
 		while (!tasks.empty()) {
 			min_p.push(tasks.back()); //wrzucamy zadania do kolejki min(r)
@@ -403,7 +410,21 @@ namespace tools {
 			min_p.pop(); //kasujemy zadania do posortowania
 		}
 	
+		temp = tasks;
+		schrage(tasks);
 		
+		while (!temp.empty()) {
+			max_p.push(temp.back()); //wrzucamy zadania do kolejki max(r)
+			temp.pop_back(); //kasujemy zadania do posortowania
+		}
+		while (!max_p.empty()) {
+			temp.push_back(max_p.top()); //wrzucamy zadania do kolejki max(r)
+			max_p.pop(); //kasujemy zadania do posortowania
+		}
+		
+		schrage(temp);
+		
+		if (c_max(n,temp) < c_max(n,tasks)) tasks = temp;
 		
 		return c_max(n, tasks);
 	}

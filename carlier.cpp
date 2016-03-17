@@ -21,54 +21,47 @@ Carlier:
 */
 
 int main() {
-	//vector<vector<unsigned> > zad1;
+	vector<vector<unsigned> > zad1;
 	vector<vector<unsigned> > zad2;
-	//vector<vector<unsigned> > zad3;
-	//vector<vector<unsigned> > zad4;
-	//unsigned zad1_length;
+	vector<vector<unsigned> > zad3;
+	vector<vector<unsigned> > zad4;
+	unsigned zad1_length;
 	unsigned zad2_length;
-	//unsigned zad3_length;
-	//unsigned zad4_length;
-	//string wejscie1 = "dane1.txt";
+	unsigned zad3_length;
+	unsigned zad4_length;
+	string wejscie1 = "dane1.txt";
 	string wejscie2 = "dane2.txt";
-	//string wejscie3 = "dane3.txt";
-	//string wejscie4 = "dane4.txt";
+	string wejscie3 = "dane3.txt";
+	string wejscie4 = "dane4.txt";
 	//unsigned U1 = 255565;
 	//unsigned U2, U3, U4;
 	//U4 = U3 = U2 = U1;
-	//unsigned suma;
+	unsigned suma, suma1, suma2, suma3, suma4;
 
+	tools::load(zad1_length, zad1, wejscie1);
+	suma1 = tools::sort_data2(zad1_length, zad1);
+	cout << "Czas Carliera dla danych 1: " << suma1 << endl;
+	
 	tools::load(zad2_length, zad2, wejscie2);
-	
-	//tools::carlier(zad1_length, zad1, U1);
-	//cout << "Czas Carliera dla danych 1: " << tools::c_max(zad1_length, zad1) << endl;
-	
-	//cout << tools::preschrage(zad1_length,zad1) << endl;
-	//tools::print(zad1);
-	
-	cout << tools::sort_data2(zad2_length, zad2) << endl;
-	
-	/*
-	tools::load(zad2_length, zad2, wejscie2);
-	tools::carlier(zad1_length, zad1, U2);
-	cout << "Czas Carliera dla danych 2: " << tools::c_max(zad2_length, zad2) << endl;
+	suma2 = tools::sort_data2(zad2_length, zad2);
+	cout << "Czas Carliera dla danych 2: " << suma2 << endl;
 	tools::print(zad2);
 	
 	tools::load(zad3_length, zad3, wejscie3);
-	tools::carlier(zad1_length, zad1, U3);
-	cout << "Czas Carliera dla danych 3: " << tools::c_max(zad3_length, zad3) << endl;
+	suma3 = tools::sort_data2(zad3_length, zad3);
+	cout << "Czas Carliera dla danych 3: " << suma3 << endl;
 	tools::print(zad3);
 	
 	tools::load(zad4_length, zad4, wejscie4);
-	tools::carlier(zad1_length, zad1, U4);
-	cout << "Czas Carliera dla danych 4: " << tools::c_max(zad4_length, zad4) << endl;
+	suma4 = tools::sort_data2(zad4_length, zad4);
+	cout << "Czas Carliera dla danych 4: " << suma4 << endl;
 	tools::print(zad4);
 
-	suma = tools::c_max<unsigned>(zad1_length, zad1) + tools::c_max(zad2_length, zad2) + tools::c_max(zad3_length, zad3) + tools::c_max(zad4_length, zad4);
+	suma = suma1 + suma2 + suma3 + suma4;
 	cout << "Suma czasow: " << suma << endl;
-*/
-	tools::save(zad2); //zapisujemy do pliku permutacje zadan
-	tools::clean(zad2_length, zad2); //sprzatamy wektory
+
+	//tools::save(zad2); //zapisujemy do pliku permutacje zadan
+	//tools::clean(zad2_length, zad2); //sprzatamy wektory
 	
 	tools::pause();
 	return 0;
