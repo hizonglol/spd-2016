@@ -6,8 +6,14 @@
 
 int w[N+1],p[N+1],d[N+1],pi[N+1];
 
-unsigned int max(int x, int y) { return (x>y)?x:y; }
-unsigned int f(int j, int s) { return w[j]*max(0,s-d[j]); }
+unsigned int max(int x, int y) {
+return (x>y)?x:y;
+}
+
+unsigned int f(int j, int s) {
+return w[j]*max(0,s-d[j]);
+}
+
 int pd(const int n, const int p[], int pi[], unsigned int &z);
 unsigned int F(const int n, const int pi[]);
 
@@ -40,7 +46,7 @@ int pd(const int n, const int p[], int pi[], unsigned int &z) {
 	unsigned long c;
  	//ile jest mozliwych kombinacji
 	unsigned long r=1uL<<n;
- 	//wektor rozwiazan 2^n
+ 	//wektor kar 2^n
   	unsigned int *G=new unsigned int [r];
   	//indeks zadania wyznaczajacego minimum
   	unsigned short int *v=new unsigned short int [r];
@@ -52,28 +58,41 @@ int pd(const int n, const int p[], int pi[], unsigned int &z) {
   	if (!G) { return -1; }
   	if (!v) { delete G; return -1; }
 
-	//zadanie poczatkowe
-	G[0]=0; v[0]=0;
+	//zadanie zerowe ma zerowa kare
+	G[0]=0;
+	//oraz sklada sie na nie zerowe pole z poprzednia kara
+	v[0]=0;
 	
+	//przeszukujemy wszystkie pola z karami oraz indeksami sk³adowych kar
 	for (e=1;e<r;e++) {
+		//suma czasow dzialania
  		s=0;
- 		for (c=k=1;c<=e;c<<=1,k++) if (e&c) s+=p[k];
+ 		//przesuwamy maske c dopoki nie bedzie rowna e
+ 		for (c=k=1;c<=e;c<<=1,k++) if (e&c) s+=p[k]; //zwiekszamy sume o czas przetwarzania
  	
+ 		//negacja bitowa i przypisanie
 		t=~0;
 	
 		for (c=k=1;c<=e;c<<=1,k++) {
 			if (e&c) {
+				//bierzemy element poprzedni z wektora kar,
+				//powiekszamy o kare elementu przetwarzanego
+				//i zapamietujemy
 				a=G[e-c]+f(k,s);
+				//wyszukujemy kombinacje dajaca najmniejsz¹ karê
 				if (a<t) {
 					t=a;
 					u=k;
 				}
 			}
-		}	
+		}
 		
-    G[e]=t;
-	v[e]=u;
-    t=t+1;
+		//zapisujemy optymalna kare
+    	G[e]=t;
+    	//zapisujemy indeks pola z ktorego zostala wzieta poprzednia kara
+		v[e]=u;
+		//idziemy z czasem do przodu
+    	t=t+1;
   	}
 
 	t=n;
