@@ -26,7 +26,6 @@ namespace tools {
 		}
 		
 		if (file.is_open()) {
-    		//! to do optymalizacji
     		unsigned counter = 1;
     		unsigned r, p, q;
 			file >> zad_length;
@@ -54,9 +53,9 @@ namespace tools {
 	}
 
 	//SAVE ******************************************************************************************
-	short save(std::vector< std::vector<unsigned> > const& zad) {
+	short save(std::vector< std::vector<unsigned> > const& zad, std::string wyjscie) {
 		std::ofstream file;
-		file.open("posortowane.txt", std::ios::out);
+		file.open(wyjscie.c_str(), std::ios::out);
 	
 		if (file.fail()) {
 			std::cerr << std::endl << "File didn't open properly within tools::save()";
@@ -76,6 +75,31 @@ namespace tools {
 		}
 		
 		
+		std::cerr << std::endl << "Unidentified error within tools::save()";
+		return -1;
+	}
+	
+	short save_time(unsigned czas1, unsigned czas2, unsigned czas3, unsigned czas4, unsigned suma){
+        std::ofstream file;
+		file.open("czasy_sortowania.txt", std::ios::out);
+		
+		if (file.fail()) {
+			std::cerr << std::endl << "File didn't open properly within tools::save()";
+			return 1;
+		}
+		
+		if (file.is_open()) {
+			file << "Czas danych 1: " << czas1 << std::endl;
+			file << "Czas danych 2: " << czas2 << std::endl;
+			file << "Czas danych 3: " << czas3 << std::endl;
+			file << "Czas danych 4: " << czas4 << std::endl;
+			file << "Suma czasow: " << suma << std::endl;
+			
+			file.close();
+		
+   		return 0;
+    	}
+    	
 		std::cerr << std::endl << "Unidentified error within tools::save()";
 		return -1;
 	}
@@ -150,12 +174,6 @@ namespace tools {
    			return t1[2] > t2[2];
 		   }
 	   };
-	   
-	struct compare_p_max {
-   		bool operator()(std::vector<unsigned> const& t1, std::vector<unsigned> const& t2) {
-   			return t1[2] < t2[2];
-		   }
-	   };
    	
 	struct compare_q {
         bool operator()(std::vector<unsigned> const& t1, std::vector<unsigned> const& t2) {
@@ -164,7 +182,7 @@ namespace tools {
    		};
 	
 	/*
-	schrage() oraz preshrage() napisany na podstawie algorytmu podanego na stronie:
+	schrage() napisany na podstawie algorytmu podanego na stronie:
 	http://dominik.zelazny.staff.iiar.pwr.wroc.pl/materialy/Algorytm_Schrage.pdf
 	*/
 	
@@ -172,259 +190,55 @@ namespace tools {
 	int schrage (std::vector< std::vector<unsigned> > & tasks) {
 		unsigned t = 0;
 		unsigned c_max = 0;
-		std::vector<std::vector<unsigned> > pi; //permutacja zadan po sortowaniu
+		std::vector<std::vector<unsigned> > pi;
 		
-		std::priority_queue <std::vector<unsigned>, std::vector< std::vector<unsigned> >, compare_r> N; //kolejka min(r)
-		std::priority_queue <std::vector<unsigned>, std::vector< std::vector<unsigned> >, compare_q> G; //kolejka max(q)
+		std::priority_queue <std::vector<unsigned>, std::vector< std::vector<unsigned> >, compare_r> N;
+		std::priority_queue <std::vector<unsigned>, std::vector< std::vector<unsigned> >, compare_q> G;
 		
 		while (!tasks.empty()) {
-			N.push(tasks.back()); //wrzucamy zadania do kolejki min(r)
-			tasks.pop_back(); //kasujemy zadania do posortowania
+			N.push(tasks.back());
+			tasks.pop_back();
 		}
 		
-		while ((!G.empty()) || (!N.empty())) { //dopoki wszystkie zadania nie zostaly przetworzone
+		while ((!G.empty()) || (!N.empty())) {
 			
-			while ((!N.empty()) && (N.top()[1] <= t)) { //jesli jest zadanie co "p" ma mniejsze od momentu czasowego
-				G.push(N.top()); //wrzucamy nowe zadanie do kolejki max(q)
-				N.pop(); //i kasujemy z kolejki min(r)
+			while ((!N.empty()) && (N.top()[1] <= t)) {
+				G.push(N.top());
+				N.pop();
 			}
 			
-			if (G.empty()) { //jesli nie ma zadnego zadania przygotowanego do przetwarzania
-				t = N.top()[1]; //przesuwamy sie o odpowiedni czas
+			if (G.empty()) {
+				t = N.top()[1];
 			}
 			else {
-			t += G.top()[2]; //przesuwamy sie z czasem "t" do przodu
-			c_max = std::max<int>(c_max, t + G.top()[3]); //zwiekszamy "c_max"
-			pi.push_back(G.top()); //zapisujemy wykonane zadanie w permutacji "pi"
-			G.pop(); //kasujemy zadanie z kolejki max(q)
-			}
-		}
-		
-		tasks = pi; //wpisujemy w wektor do posortowania permutacje zadan posortowanych
-	
-		return c_max;
-	}
-	
-	/* schrage z przerwaniami *///*******************************************************************
-	int preschrage (unsigned const& zad_length, std::vector< std::vector<unsigned> >const & tasks) {
-		unsigned t = 0; //aktualny moment czasowy
-		unsigned c_max = 0;
-		std::vector<unsigned> machine_task; //zmienna przechowujaca zadanie wykonywane na maszynie
-		machine_task.push_back(255565);  machine_task.push_back(0);
-		machine_task.push_back(0);  machine_task.push_back(0); //tworzymy zadanie poczatkowe
-		
-		std::priority_queue <std::vector<unsigned>, std::vector< std::vector<unsigned> >, compare_r> N; //kolejka min(r)
-		std::priority_queue <std::vector<unsigned>, std::vector< std::vector<unsigned> >, compare_q> G; //kolejka max(q)
-		
-		for (unsigned i = 0; i<zad_length; ++i) {
-			N.push(tasks[i]); //wrzucamy zadania do kolejki min(r)
-		}
-		
-		while ((!G.empty()) || (!N.empty())) { //dopoki wszystkie zadania nie zostaly przetworzone
-			
-			while ((!N.empty()) && (N.top()[1] <= t)) { //jesli jest zadanie co "p" ma mniejsze od momentu czasowego
-				G.push(N.top()); //wrzucamy nowe zadanie do kolejki max(q) ale zostawiamy do porownania z zadaniem na maszynie
-				
-				if (N.top()[3] > machine_task[3]) { //jesli dorzucone zadanie ma wieksze "q" od zadania na maszynie
-					machine_task[2] = t - N.top()[1]; //zmniejszamy zadanie na maszynie o tyle ile sie wykonalo
-					t = N.top()[1]; //nowy czas jest czasem "p" zadania nowo przybylego
-				}
-				
-				if (machine_task[2] > 0) {
-					G.push(machine_task); //jesli zadanie na maszynie nie skonczone to z powrotem do kolejki max(q)
-				}
-				
-				N.pop(); //po porownaniu z zadaniem na maszynie kasujemy
-			}
-
-			if (G.empty()) { //jesli nie ma zadnego zadania przygotowanego do przetwarzania
-				t = N.top()[1]; //przesuwamy sie o odpowiedni czas
-			}
-			else {
-			machine_task = G.top(); //wrzucamy na maszyne zadanie z kolejki max(q)
+			t += G.top()[2];
+			c_max = std::max<int>(c_max, t + G.top()[3]);
+			pi.push_back(G.top());
 			G.pop();
-			t += machine_task[2]; //przesuwamy sie z czasem "t" do przodu
-			c_max = std::max<int>(c_max, t + machine_task[3]); //zwiekszamy "c_max"
 			}
 		}
 		
+		tasks = pi;
+	
 		return c_max;
 	}
-	
-	/*
-	set_a_b_index(), c_not_exists(), carlier() napisane na podstawie algorytmu podanego na stronie:
-	http://dominik.zelazny.staff.iiar.pwr.wroc.pl/materialy/Algorytm_Carlier.pdf
-	*/
-	
-	/* wyznaczanie sciezki krytycznej o indeksach a i b *///************************************************************************
-	void set_a_b_c_index(unsigned const& n, std::vector<std::vector<unsigned> > const& pi, long unsigned const& U, unsigned & a_index, unsigned & b_index){
-		a_index = 0;
-		b_index = 0;
-		unsigned j, s;
-		unsigned sum;
-		unsigned t_p = 0;
-		unsigned c_temp = 0;
-		
-		std::cout << "Wyznaczam b." << std::endl;
-		
-		for (j=0; j<n; j++){ //przeszukujemy wszystkie zadania z permutacji "pi"
-			t_p = std::max<unsigned long>(t_p,pi[j][1]) + pi[j][2];
-			c_temp = std::max<unsigned long>(t_p + pi[j][3], c_temp); //tutaj zwiekszam sobie c_max dla j-tego elementu
-			
-			if (c_temp == U){
-				std::cout << "Indeks b: "  << j << std::endl;
-				b_index = j;
-			}
-		}
-		
-		std::cout << "Wyznaczam a." << std::endl;
-		
-		sum = 0;
-		for (s=0; s<=b_index; s++)	sum += pi[s][2]; //suma "p" od 0 do "b_index"
-		
-		for (j=0; j<n; j++){ //przesuwamy sie po wszystkich elementach wektora
-			if (pi[j][1] + sum + pi[b_index][3] <= U) { //sprawdzamy warunek
-				a_index = j;
-				std::cout << "Indeks a: " << a_index << std::endl;
-				break; //pierwsze znalezione "a_index" konczy petle
-			}
-			
-			sum -= pi[j][2]; //zmieniamy przedzial sumy kiedy zmienia sie "a"
-		}
-	}
-	
-	/* wyznaczanie c *///****************************************************************************
-	bool c_not_exists(std::vector<std::vector<unsigned> > const& pi, unsigned const& a_index, unsigned const& b_index, unsigned& c_index) {
-		bool c_not_exists = true; //c domyslnie nie istnieje
-		
-		for (unsigned j=a_index; j<=b_index; ++j){ //poruszamy sie po sciezce krytycznej
-			if (pi[j][3] < pi[b_index][3]){ //szukamy zadania o najwyzszym indeksie poprzedzajacego "b_index" z dluzszym "q" od "b_index"
-				c_not_exists = false; //c istnieje
-				c_index = j; //jesli znalezione zadanie c to zapisujemy jego indeks w "c_index"
-			}
-		}
-		
-		return c_not_exists;
-	}
-	
-	/* carlier *///**********************************************************************************
-	int carlier(unsigned const& n, std::vector< std::vector<unsigned> > & tasks, unsigned& UB){
-		long unsigned U, LB;
-		unsigned r_old, q_old;
-		unsigned r_prim = 0;
-		unsigned p_prim = 0;
-		unsigned q_prim = 0;
-		unsigned a_index, b_index, c_index;
-		
-		std::vector<std::vector<unsigned> > pi = tasks;
-		
-		//1
-		U = schrage(pi); //wyznaczamy sobie c_max w permutacji "pi"
-		std::cout << "Carlier 1." << std::endl;
-		
-		//2
-		if(U < UB){ //jesli c_max jest mniejsze od gornego ograniczenia to zapisujemy te permutacje
-			UB = U;
-			tasks = pi;
-		}
-		std::cout << "Carlier 2." << std::endl;
-		
-		//pierwsza polowa 3
-		set_a_b_c_index(n, pi, U, a_index, b_index); //wyznaczamy indeksy sciezki krytycznej
-		std::cout << "Carlier 3." << std::endl;
-		
-		//4 i druga polowa 3
-		if (c_not_exists(pi, a_index, b_index, c_index)){ //wyznaczamy indeks zadania referencyjnego
-		std::cout << "C does not exist.";
-		return 0;
-		}
-		std::cout << "Carlier 4." << std::endl;
-		
-		//5
-		p_prim = 0;
-		for (unsigned i=(c_index+1); i<b_index; ++i) {
-			if (pi[i][1] < r_prim) r_prim = pi[i][1];
-			if (pi[i][3] < q_prim) q_prim = pi[i][3];
-			p_prim += pi[i][2];
-		}
-		std::cout << "Carlier 5." << std::endl;
-		
-		//6
-		r_old = pi[c_index][1]; //zapamietujemy sobie wartosc "r" zadania referencyjnego o indeksie "c_index"
-		pi[c_index][1] = std::max<unsigned>(pi[c_index][1], r_prim+p_prim); //nadpisujemy wartosc "r" zadania referencyjnego nowa wartoscia
-		std::cout << "Carlier 6." << std::endl;
-		
-		//7
-		LB = preschrage(n, pi); //wyznaczamy dolne ograniczenie permutacji "pi"
-		std::cout << "Carlier 7." << std::endl;
-		
-		//8
-		if (LB < UB) { //jesli da sie lepiej upakowac zadania
-		   std::cout << "Carlier 8." << std::endl; 
-		   /*9*/ 
-		   carlier(n, pi, UB); //to uruchamiamy znowu carliera
-		}
-		std::cout << "Carlier 9." << std::endl;
-		
-		//10
-		pi[c_index][1] = r_old; //przywracamy stara wartosc "r" w zadaniu referencyjnym
-		std::cout << "Carlier 10." << std::endl;
-		
-		//11
-		q_old = pi[c_index][3]; //zapamietujemy wartosc "q" z zadania referencyjnego
-		pi[c_index][3] = std::max<unsigned>(pi[c_index][3], q_prim+p_prim); //nadpisujemy wartosc "q" zadania referencyjnego
-		std::cout << "Carlier 11." << std::endl;
-		
-		//12
-		LB = preschrage(n, pi); //wyznaczamy sobie dolne ograniczenie permutacji "pi"
-		std::cout << "Carlier 12." << std::endl;
-		
-		//13
-		if (LB < UB){ //jesli da sie lepiej upakowac
-		    std::cout << "Carlier 13." << std::endl; 
-			/*14*/ 
-		 	carlier(n, pi, UB); //to uruchamiamy carlier 
-		}
-  		std::cout << "Carlier 14." << std::endl; 
-  		
-		//15
-		pi[c_index][3] = q_old; //przywracamy stara wartosc "q" w zadaniu referencyjnym
-  		std::cout << "Carlier 15." << std::endl; 
-		
-		return -1;
-	}
 
-	/* algorytm sorotowania data.2 *///*************************************************
-	int sort_data2(unsigned const& n, std::vector< std::vector<unsigned> > & tasks){
+	/* algorytm sorotowania better_schrage *///*************************************************
+	int better_schrage(unsigned const& n, std::vector< std::vector<unsigned> > & tasks){
 		std::vector< std::vector<unsigned> > temp;
 		
-		std::priority_queue <std::vector<unsigned>, std::vector< std::vector<unsigned> >, compare_p_min> min_p; //kolejka min(p)
-		std::priority_queue <std::vector<unsigned>, std::vector< std::vector<unsigned> >, compare_p_max> max_p; //kolejka max(p)
+		std::priority_queue <std::vector<unsigned>, std::vector< std::vector<unsigned> >, compare_p_min> min_p;
 		
 		while (!tasks.empty()) {
-			min_p.push(tasks.back()); //wrzucamy zadania do kolejki min(r)
-			tasks.pop_back(); //kasujemy zadania do posortowania
+			min_p.push(tasks.back());
+			tasks.pop_back();
 		}
 		while (!min_p.empty()) {
-			tasks.push_back(min_p.top()); //wrzucamy zadania do kolejki min(r)
-			min_p.pop(); //kasujemy zadania do posortowania
+			tasks.push_back(min_p.top());
+			min_p.pop();
 		}
 	
-		temp = tasks;
 		schrage(tasks);
-		
-		while (!temp.empty()) {
-			max_p.push(temp.back()); //wrzucamy zadania do kolejki max(r)
-			temp.pop_back(); //kasujemy zadania do posortowania
-		}
-		while (!max_p.empty()) {
-			temp.push_back(max_p.top()); //wrzucamy zadania do kolejki max(r)
-			max_p.pop(); //kasujemy zadania do posortowania
-		}
-		
-		schrage(temp);
-		
-		if (c_max(n,temp) < c_max(n,tasks)) tasks = temp;
 		
 		return c_max(n, tasks);
 	}

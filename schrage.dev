@@ -1,6 +1,6 @@
 [Project]
 FileName=carlier.dev
-Name=carlier
+Name=schrage
 Type=1
 Ver=2
 ObjFiles=
@@ -51,7 +51,7 @@ AutoIncBuildNr=0
 SyncProduct=1
 
 [Unit1]
-FileName=carlier.cpp
+FileName=schrage.cpp
 CompileCpp=1
 Folder=
 Compile=1

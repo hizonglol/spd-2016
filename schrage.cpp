@@ -6,19 +6,6 @@
 #include "tools.h"
 
 using namespace std;
-/* jak powinno wyjsc dla tych danych:
-Schrage:
-1. 13981   
-2. 21529   
-3. 31683   
-4. 34444   
-
-Carlier:
-1. 13862
-2. 20917
-3. 31343
-4. 33878
-*/
 
 int main() {
 	vector<vector<unsigned> > zad1;
@@ -33,36 +20,39 @@ int main() {
 	string wejscie2 = "dane2.txt";
 	string wejscie3 = "dane3.txt";
 	string wejscie4 = "dane4.txt";
-	//unsigned U1 = 255565;
-	//unsigned U2, U3, U4;
-	//U4 = U3 = U2 = U1;
+	string wyjscie1 = "out1.txt";
+	string wyjscie2 = "out2.txt";
+	string wyjscie3 = "out3.txt";
+	string wyjscie4 = "out4.txt";
 	unsigned suma, suma1, suma2, suma3, suma4;
 
 	tools::load(zad1_length, zad1, wejscie1);
-	suma1 = tools::sort_data2(zad1_length, zad1);
-	cout << "Czas Carliera dla danych 1: " << suma1 << endl;
+	suma1 = tools::better_schrage(zad1_length, zad1);
+	cout << "Czas Schrage dla danych 1: " << suma1 << endl;
 	
 	tools::load(zad2_length, zad2, wejscie2);
-	suma2 = tools::sort_data2(zad2_length, zad2);
-	cout << "Czas Carliera dla danych 2: " << suma2 << endl;
+	suma2 = tools::better_schrage(zad2_length, zad2);
+	cout << "Czas Schrage dla danych 2: " << suma2 << endl;
 	tools::print(zad2);
 	
 	tools::load(zad3_length, zad3, wejscie3);
-	suma3 = tools::sort_data2(zad3_length, zad3);
-	cout << "Czas Carliera dla danych 3: " << suma3 << endl;
+	suma3 = tools::better_schrage(zad3_length, zad3);
+	cout << "Czas Schrage dla danych 3: " << suma3 << endl;
 	tools::print(zad3);
 	
 	tools::load(zad4_length, zad4, wejscie4);
-	suma4 = tools::sort_data2(zad4_length, zad4);
-	cout << "Czas Carliera dla danych 4: " << suma4 << endl;
+	suma4 = tools::better_schrage(zad4_length, zad4);
+	cout << "Czas Schrage dla danych 4: " << suma4 << endl;
 	tools::print(zad4);
 
 	suma = suma1 + suma2 + suma3 + suma4;
 	cout << "Suma czasow: " << suma << endl;
 
-	//tools::save(zad2); //zapisujemy do pliku permutacje zadan
-	//tools::clean(zad2_length, zad2); //sprzatamy wektory
-	
-	tools::pause();
+	tools::save(zad1, wyjscie1);
+	tools::save(zad2, wyjscie2);
+    tools::save(zad3, wyjscie3);
+    tools::save(zad4, wyjscie4);
+    tools::save_time(suma1, suma2, suma3, suma4, suma);
+    
 	return 0;
 }

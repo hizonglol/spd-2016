@@ -1,0 +1,5 @@
+Czas danych 1: 13981
+Czas danych 2: 21074
+Czas danych 3: 31683
+Czas danych 4: 34444
+Suma czasow: 101182
