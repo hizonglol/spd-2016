@@ -2,6 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <queue>
 
 #include "tools.h"
 
@@ -16,24 +17,39 @@ int main(){
 	
 	tools::load(database, filename);
 	
-	for(unsigned i = 0; i<database.size(); ++i){
-		//kolejka priorytetowa do napisania zamiast tego ponizej
- 	    vector<vector<unsigned> > data_pack = database[i];//wektor z zadaniami
+	for(unsigned i = 0; i<1/*database.size()*/; ++i){
+		
+		//posortowane po najdluzszym czasie t1
+		priority_queue <vector<unsigned>, vector<vector<unsigned> >, tools::compare_time> data_pack_queue;
+		for (unsigned j=0; j<database[i].size(); ++j) {
+			data_pack_queue.push(database[i][j]);
+		}
+		
+		vector<vector<unsigned> > data_pack;//do tego wpisujemy zadania ktore na koniec bedac posortowane zwracamy
 		vector<vector<unsigned> > data_pack_cell_time_left;//graf z czasami od lewej do prawej
 		vector<vector<unsigned> > data_pack_cell_time_right;//graf z czasami od prawej do lewej
+		
+		data_pack.push_back(data_pack_queue.top());//wrzucamy element z najdluzszym czasem do koleji
+		data_pack_queue.pop();//usuwamy go z kolejki
 		
 		//pierwsza kolumna grafu l-p
 		vector<unsigned> first_column_time_left;
 		//liczenie czasu wykonania pierwszej kolumny
 		first_column_time_left.push_back(data_pack[0][1]);
-		for(unsigned i = 1; i<data_pack[0].size(); ++i) {
-		first_column_time_left.push_back(data_pack[0][i]+first_column_time_left[i-1]);
+		for(unsigned k = 2; k<data_pack[0].size(); ++k) {//2 dlatego bo na 0 mamy indeks, a na 1 juz zostalo policzone
+		    first_column_time_left.push_back(first_column_time_left[k-2]+data_pack[0][k]);
 	    }
 		data_pack_cell_time_left.push_back(first_column_time_left);
 		
-		//pierwsza kolumna grafu p-l
+		//dla sprawdzenia pierwszej kolumny
+		cout<<first_column_time_left[0] << endl;
+		cout<<first_column_time_left[1] << endl;
+		cout<<first_column_time_left[2];
 		
-		database_after_sort.push_back(data_pack);
+		//pierwsza kolumna grafu p-l
+		//...
+		
+		database_after_sort.emplace_back(data_pack);
 		database_cell_time_left.push_back(data_pack_cell_time_left);
 		database_cell_time_right.push_back(data_pack_cell_time_right);
 	}

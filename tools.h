@@ -83,6 +83,13 @@ namespace tools {
 		return -1;
 	}
 	
+	struct compare_time {
+        bool operator()(std::vector<unsigned> const& t1, std::vector<unsigned> const& t2) {
+        	if ((t1[1]+t1[2]+t1[3]) == (t2[1]+t2[2]+t2[3])) return t1[0] > t2[0];//zwracamy ten z nizszym indeksem jesli ten sam czas
+           	return (t1[1]+t1[2]+t1[3]) < (t2[1]+t2[2]+t2[3]);//zwracamy ten z dluzszym czasem
+       	}
+	};
+	
 	/*	
 	//PRINT *****************************************************************************************
 	short print(std::vector< std::vector<unsigned> > const& zad) {
