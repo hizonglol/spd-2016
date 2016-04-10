@@ -31,9 +31,10 @@ namespace tools {
 					std::vector<std::vector<unsigned> > data_pack;
 					data_pack.reserve(data_quantity);
                     
-				    for(unsigned i=0; i<data_quantity; ++i){//tutaj wczytujemy pakiet zadan
+				    for(unsigned i=1; i<=data_quantity; ++i){//tutaj wczytujemy pakiet zadan
 					    std::vector<unsigned> vector_line;
-					    vector_line.reserve(task_length);
+					    vector_line.reserve(task_length+1);
+					    vector_line.push_back(i);
 					    
 					    for(unsigned j=0; j<task_length; ++j){//tutaj wczytujemy linie
 						    file >> number;
@@ -57,7 +58,7 @@ namespace tools {
 	//SAVE ******************************************************************************************
 	short save(std::vector<std::vector<std::vector<unsigned> > > const& database) {
 		std::ofstream file;
-		file.open("posortowane.txt", std::ios::out);
+		file.open("after_sort.txt", std::ios::out);
 	
 		if (file.fail()) {
 			std::cerr << std::endl << "File didn't open properly within tools::save()";
@@ -65,8 +66,15 @@ namespace tools {
 		}
 	
 		if (file.is_open()) {
-			
-			//do napisania wedle potrzeb
+			for(unsigned i=0; i<database.size(); ++i){//tutaj wczytujemy pakiet zadan
+				file << "NEH." << i+1 << ':' << std::endl;
+					    
+				for(unsigned j=0; j<database[i].size(); ++j){//tutaj wczytujemy linie
+					file << database[i][j][0] << ' ';
+				}
+				
+				file << std::endl << std::endl;
+			}
 		
 		return 0;
 		}
