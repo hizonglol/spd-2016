@@ -83,6 +83,26 @@ namespace tools {
 		return -1;
 	}
 	
+	int c_max(std::vector<std::vector<unsigned> > data_pack){
+		std::vector<unsigned> temp_time;
+		temp_time.resize(data_pack[0].size()-1);
+		
+		//zalatwiamy pierwszy element data_pack
+		temp_time[0]=data_pack[0][1];
+		for(unsigned i=1; i<temp_time.size(); ++i) temp_time[i]=temp_time[i-1]+data_pack[0][i+1];
+		
+		//od tego momentu cos sie zle liczy
+		for(unsigned i=1; i<data_pack.size(); ++i){
+			temp_time[0] += data_pack[i][1];
+			for(unsigned j=1; j<temp_time.size(); ++j){
+				temp_time[j] += (std::max(temp_time[j-1], temp_time[j]) + data_pack[i][j+1]);
+			}
+		}
+		//do tego momentu cos sie zle liczy
+		
+		return temp_time[temp_time.size()];
+	}
+	
 	struct compare_time {
         bool operator()(std::vector<unsigned> const& t1, std::vector<unsigned> const& t2) {
         	if ((t1[1]+t1[2]+t1[3]) == (t2[1]+t2[2]+t2[3])) return t1[0] > t2[0];//zwracamy ten z nizszym indeksem jesli ten sam czas

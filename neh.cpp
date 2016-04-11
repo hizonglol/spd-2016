@@ -4,6 +4,10 @@
 #include <string>
 #include <queue>
 
+/*
+optymalizacja polega na zmianie liczenia cmax
+*/
+
 #include "tools.h"
 
 using namespace std;
@@ -13,7 +17,7 @@ int main(){
 	vector<vector<vector<unsigned> > > database;//wektor z pakietami zadan
 	vector<vector<vector<unsigned> > > database_after_sort;//wektor z pakietami zadan po sortowaniu
 	vector<vector<vector<unsigned> > > database_cell_time_left;//wektor z pakietami cmax
-	vector<vector<vector<unsigned> > > database_cell_time_right;//wektor z pakietami cmax
+	//vector<vector<vector<unsigned> > > database_cell_time_right;//wektor z pakietami cmax
 	
 	tools::load(database, filename);
 	
@@ -25,33 +29,54 @@ int main(){
 			data_pack_queue.push(database[i][j]);
 		}
 		
-		vector<vector<unsigned> > data_pack;//do tego wpisujemy zadania ktore na koniec bedac posortowane zwracamy
-		vector<vector<unsigned> > data_pack_cell_time_left;//graf z czasami od lewej do prawej
-		vector<vector<unsigned> > data_pack_cell_time_right;//graf z czasami od prawej do lewej
 		
-		data_pack.push_back(data_pack_queue.top());//wrzucamy element z najdluzszym czasem do koleji
-		data_pack_queue.pop();//usuwamy go z kolejki
 		
-		//pierwsza kolumna grafu l-p
-		vector<unsigned> first_column_time_left;
-		//liczenie czasu wykonania pierwszej kolumny
-		first_column_time_left.push_back(data_pack[0][1]);
-		for(unsigned k = 2; k<data_pack[0].size(); ++k) {//2 dlatego bo na 0 mamy indeks, a na 1 juz zostalo policzone
-		    first_column_time_left.push_back(first_column_time_left[k-2]+data_pack[0][k]);
-	    }
-		data_pack_cell_time_left.push_back(first_column_time_left);
+		vector<vector<unsigned> > data_pack;
+		data_pack.insert(data_pack.begin(), data_pack_queue.top());
+		data_pack_queue.pop();
 		
-		//dla sprawdzenia pierwszej kolumny
-		cout<<first_column_time_left[0] << endl;
-		cout<<first_column_time_left[1] << endl;
-		cout<<first_column_time_left[2];
+		for (unsigned i=0, time=0; data_pack_queue.size(); ++i){
+			data_pack.insert(data_pack.begin(), data_pack_queue.top());
+			data_pack_queue.pop();
+			time = tools::c_max(data_pack);
+			unsigned temp_time=0;
+			unsigned temp_index=0;
+			
+			//dla sprawdzenia
+			//cos chyba zle przeklada elementy
+			for (unsigned k=0; k<data_pack.size(); ++k){
+				for (unsigned l=1; l<data_pack[k].size(); ++l){
+					cout << data_pack[k][l] << ' ';
+				}
+				cout << endl;
+			}
+			cout << endl;
+			//koniec dla sprawdzneia
+			
+			for (unsigned j=1; j<data_pack.size(); ++j){
+				vector<unsigned> temp_vector = data_pack[j-1];
+				data_pack[j-1] = data_pack[j];
+				data_pack[j] = temp_vector;
+				
+				//dla sprawdzenia
+				for (unsigned k=0; k<data_pack.size(); ++k){
+					for (unsigned l=1; l<data_pack[k].size(); ++l){
+						cout << data_pack[k][l] << ' ';
+					}
+					cout << endl;
+				}
+				//koniec dla sprawdzenia
+				
+				temp_time = tools::c_max(data_pack);
+			
+				if (time > temp_time) {
+					temp_index = j;
+				}
+				
+				cout << endl;//dla sprawdzenia
+		 	}
+		}
 		
-		//pierwsza kolumna grafu p-l
-		//...
-		
-		database_after_sort.emplace_back(data_pack);
-		database_cell_time_left.push_back(data_pack_cell_time_left);
-		database_cell_time_right.push_back(data_pack_cell_time_right);
 	}
 	
 	
