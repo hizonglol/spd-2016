@@ -42,30 +42,9 @@ int main(){
 			unsigned temp_time=0;
 			unsigned temp_index=0;
 			
-			//dla sprawdzenia
-			//cos chyba zle przeklada elementy
-			for (unsigned k=0; k<data_pack.size(); ++k){
-				for (unsigned l=1; l<data_pack[k].size(); ++l){
-					cout << data_pack[k][l] << ' ';
-				}
-				cout << endl;
-			}
-			cout << endl;
-			//koniec dla sprawdzneia
 			
 			for (unsigned j=1; j<data_pack.size(); ++j){
-				vector<unsigned> temp_vector = data_pack[j-1];
-				data_pack[j-1] = data_pack[j];
-				data_pack[j] = temp_vector;
-				
-				//dla sprawdzenia
-				for (unsigned k=0; k<data_pack.size(); ++k){
-					for (unsigned l=1; l<data_pack[k].size(); ++l){
-						cout << data_pack[k][l] << ' ';
-					}
-					cout << endl;
-				}
-				//koniec dla sprawdzenia
+				data_pack[j-1].swap(data_pack[j]);
 				
 				temp_time = tools::c_max(data_pack);
 			
