@@ -42,6 +42,10 @@ int main(){
 			unsigned temp_time=0;
 			unsigned temp_index=0;
 			
+<<<<<<< HEAD
+=======
+			
+>>>>>>> origin/cw3
 			for (unsigned j=1; j<data_pack.size(); ++j){
 				data_pack[j-1].swap(data_pack[j]);
 				

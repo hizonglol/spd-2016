@@ -2,6 +2,7 @@
 Order=0,1
 Focused=0
 [Editor_0]
+<<<<<<< HEAD
 CursorCol=38
 CursorRow=55
 TopLine=37
@@ -10,4 +11,14 @@ LeftChar=1
 CursorCol=4
 CursorRow=99
 TopLine=82
+=======
+CursorCol=3
+CursorRow=33
+TopLine=16
+LeftChar=1
+[Editor_1]
+CursorCol=36
+CursorRow=76
+TopLine=64
+>>>>>>> origin/cw3
 LeftChar=1
