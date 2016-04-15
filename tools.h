@@ -9,7 +9,10 @@ namespace tools {
 	
 	
 	//LOAD ******************************************************************************************
-	short load(std::vector<std::vector<std::vector<unsigned> > >& database, std::string wejscie) {
+	short load(std::vector<std::vector<std::vector<unsigned> > >& database,
+			std::vector<std::vector<unsigned> >& indexes,
+			std::string wejscie)
+	{
 		std::ifstream file;
 		std::string line;
 		unsigned data_quantity;
@@ -27,7 +30,11 @@ namespace tools {
 			while(!file.eof()){
 				getline(file, line);
 			    if(line[0] == 'd' && line[8] == ':'){
+					std::vector<unsigned> pack_indexes;
                     file >> data_quantity >> task_length;
+                    pack_indexes.push_back(data_quantity);
+                    pack_indexes.push_back(task_length);
+                    indexes.push_back(pack_indexes);
 					std::vector<std::vector<unsigned> > data_pack;
 					data_pack.reserve(data_quantity);
                     
@@ -99,6 +106,50 @@ namespace tools {
 		}
 		
 		return temp_time[temp_time.size()-1];
+	}
+
+	//funkcja odbudowujaca graf od lewej do prawej
+	void c_max_left(std::vector<std::vector<unsigned> > data_pack,
+					unsigned ** data_pack_time_left, unsigned const& rebuild_index, unsigned const& n){
+	
+		//pierwszy element grafu buduje sie troche inaczej
+		//wzorowalem sie na tym co mielismy wczesniej
+		if(rebuild_index == 0){
+			for(unsigned i=0, temp=0; i<n; ++i){
+				data_pack_time_left[0][i] = temp += data_pack[0][i+1];
+			}	
+		}
+	
+		//sprawdzamy czy czasem nie kazemy sie zbudowac od miejsca w ktorym juz sie skonczyl graf
+		if(rebuild_index < (data_pack.size()-1)){
+			//budujemy od indeksu na pewno niezerowego
+			for(unsigned i=rebuild_index+1; i<data_pack.size()-1; ++i){
+				data_pack_time_left[i][0] = data_pack_time_left[i-1][0] + data_pack[i][1];
+				for(unsigned j=1; j<n; ++j){
+					data_pack_time_left[i][j] = data_pack[i][j+1] + std::max<unsigned>(data_pack_time_left[i-1][j], data_pack_time_left[i][j-1]);
+				}
+			}
+		}
+	}
+	
+	//funkcja odbudowujaca graf od prawej do lewej
+	void c_max_right(std::vector<std::vector<unsigned> > data_pack,
+					unsigned ** data_pack_time_right, unsigned const& rebuild_index, unsigned const& n){
+		
+		if(rebuild_index == 0){
+			for(unsigned i=0, temp=0; i<n; ++i){
+				data_pack_time_right[0][i] = temp += data_pack[0][n-i-1];
+			}	
+		}
+	
+		if(rebuild_index < (data_pack.size()-1)){
+			for(unsigned i=rebuild_index+1; i<data_pack.size()-1; ++i){
+				data_pack_time_right[i][0] = data_pack_time_right[i-1][0] + data_pack[i][n-1];
+				for(unsigned j=1; j<n; ++j){
+					data_pack_time_right[i][j] = data_pack[i][n-j-1] + std::max<unsigned>(data_pack_time_right[i-1][j], data_pack_time_right[i][j-1]);
+				}
+			}
+		}
 	}
 	
 	struct compare_time {
