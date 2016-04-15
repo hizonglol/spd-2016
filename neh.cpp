@@ -41,11 +41,7 @@ int main(){
 			time = tools::c_max(data_pack);
 			unsigned temp_time=0;
 			unsigned temp_index=0;
-			
-<<<<<<< HEAD
-=======
-			
->>>>>>> origin/cw3
+
 			for (unsigned j=1; j<data_pack.size(); ++j){
 				data_pack[j-1].swap(data_pack[j]);
 				
@@ -58,7 +54,6 @@ int main(){
 		 	data_pack.insert(data_pack.begin()+temp_index, data_pack[data_pack.size()-1]);
 		 	data_pack.erase(data_pack.end());
 		}
-		for(int i = 0; i<data_pack.size(); ++i) cout << data_pack[i][0] << endl;
 	}
 	
 	
