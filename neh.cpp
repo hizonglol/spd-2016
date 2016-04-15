@@ -21,8 +21,8 @@ int main(){
 	
 	tools::load(database, filename);
 	
-	for(unsigned i = 0; i<1/*database.size()*/; ++i){
-		
+	for(unsigned i = 1; i<2/*database.size()*/; ++i){
+	
 		//posortowane po najdluzszym czasie t1
 		priority_queue <vector<unsigned>, vector<vector<unsigned> >, tools::compare_time> data_pack_queue;
 		for (unsigned j=0; j<database[i].size(); ++j) {
@@ -42,41 +42,19 @@ int main(){
 			unsigned temp_time=0;
 			unsigned temp_index=0;
 			
-			//dla sprawdzenia
-			//cos chyba zle przeklada elementy
-			for (unsigned k=0; k<data_pack.size(); ++k){
-				for (unsigned l=1; l<data_pack[k].size(); ++l){
-					cout << data_pack[k][l] << ' ';
-				}
-				cout << endl;
-			}
-			cout << endl;
-			//koniec dla sprawdzneia
-			
 			for (unsigned j=1; j<data_pack.size(); ++j){
-				vector<unsigned> temp_vector = data_pack[j-1];
-				data_pack[j-1] = data_pack[j];
-				data_pack[j] = temp_vector;
-				
-				//dla sprawdzenia
-				for (unsigned k=0; k<data_pack.size(); ++k){
-					for (unsigned l=1; l<data_pack[k].size(); ++l){
-						cout << data_pack[k][l] << ' ';
-					}
-					cout << endl;
-				}
-				//koniec dla sprawdzenia
+				data_pack[j-1].swap(data_pack[j]);
 				
 				temp_time = tools::c_max(data_pack);
 			
 				if (time > temp_time) {
 					temp_index = j;
 				}
-				
-				cout << endl;//dla sprawdzenia
 		 	}
+		 	data_pack.insert(data_pack.begin()+temp_index, data_pack[data_pack.size()-1]);
+		 	data_pack.erase(data_pack.end());
 		}
-		
+		for(int i = 0; i<data_pack.size(); ++i) cout << data_pack[i][0] << endl;
 	}
 	
 	

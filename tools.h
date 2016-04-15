@@ -91,16 +91,14 @@ namespace tools {
 		temp_time[0]=data_pack[0][1];
 		for(unsigned i=1; i<temp_time.size(); ++i) temp_time[i]=temp_time[i-1]+data_pack[0][i+1];
 		
-		//od tego momentu cos sie zle liczy
 		for(unsigned i=1; i<data_pack.size(); ++i){
 			temp_time[0] += data_pack[i][1];
 			for(unsigned j=1; j<temp_time.size(); ++j){
-				temp_time[j] += (std::max(temp_time[j-1], temp_time[j]) + data_pack[i][j+1]);
+				temp_time[j] = (std::max(temp_time[j-1], temp_time[j]) + data_pack[i][j+1]);
 			}
 		}
-		//do tego momentu cos sie zle liczy
 		
-		return temp_time[temp_time.size()];
+		return temp_time[temp_time.size()-1];
 	}
 	
 	struct compare_time {
