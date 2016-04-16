@@ -34,10 +34,10 @@ int main(){
 		
 		//graf z czasami od lewej do prawej
 		unsigned ** data_pack_time_left = new unsigned *[m];
-		for(unsigned i=0; i<n; ++i) data_pack_time_left[i] = new unsigned [n];
+		for(unsigned i=0; i<m; ++i) data_pack_time_left[i] = new unsigned [n];
 		//graf z czasami od prawej do lewej
 		unsigned ** data_pack_time_right = new unsigned *[m];
-		for(unsigned i=0; i<n; ++i) data_pack_time_right[i] = new unsigned [n];
+		for(unsigned i=0; i<m; ++i) data_pack_time_right[i] = new unsigned [n];
 		
 		data_pack.insert(data_pack.begin(), data_pack_queue.top());
 		data_pack_queue.pop();
@@ -56,6 +56,7 @@ int main(){
 		//tools::c_max_left(data_pack, data_pack_time_left, 0, n);
 		tools::c_max_right(data_pack, data_pack_time_right, 0, n);
 		
+		/*
 		for (unsigned i=0, time=0; data_pack_queue.size(); ++i){
 			data_pack.insert(data_pack.begin(), data_pack_queue.top());
 			data_pack_queue.pop();
@@ -74,6 +75,15 @@ int main(){
 		 	}
 		 	data_pack.insert(data_pack.begin()+temp_index, data_pack[data_pack.size()-1]);
 		 	data_pack.erase(data_pack.end());
+		}*/
+		
+		for (unsigned i=0; data_pack_queue.size(); ++i){
+			data_pack.push_back(data_pack_queue.top());
+			//data_pack.insert(data_pack.begin(), data_pack_queue.top());
+			data_pack_queue.pop();
+			
+			//tools::c_max_left(data_pack, data_pack_time_left, 0, n);
+			tools::c_max_right(data_pack, data_pack_time_right, 0, n);
 		}
 	}
 	
