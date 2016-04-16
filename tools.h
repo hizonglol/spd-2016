@@ -138,9 +138,11 @@ namespace tools {
 		
 		if(rebuild_index == 0){
 			for(unsigned i=0, temp=0; i<n; ++i){
-				data_pack_time_right[0][i] = temp += data_pack[0][n-i-1];
+				data_pack_time_right[0][i] = temp += data_pack[0][n-i];
 			}	
 		}
+		
+		std::cout << data_pack_time_right[0][0] << " " << data_pack_time_right[0][1] << " " << data_pack_time_right[0][2] << std::endl;
 	
 		if(rebuild_index < (data_pack.size()-1)){
 			for(unsigned i=rebuild_index+1; i<data_pack.size()-1; ++i){

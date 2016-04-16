@@ -18,7 +18,7 @@ int main(){
 	
 	tools::load(database, indexes, filename);
 	
-	for(unsigned i = 1; i<2/*database.size()*/; ++i){
+	for(unsigned i = 0; i<1/*database.size()*/; ++i){
 	
 		//posortowane po najdluzszym czasie t1
 		priority_queue <vector<unsigned>, vector<vector<unsigned> >, tools::compare_time> data_pack_queue;
@@ -44,17 +44,17 @@ int main(){
 		
 		
 		//inicjalizacja grafu z czasami od lewej do prawej
-		for(unsigned i=0, temp=0; i<n; ++i){
-			data_pack_time_left[0][i] = temp += data_pack[0][i+1];
-		}
+		//for(unsigned i=0, temp=0; i<n; ++i){
+		//	data_pack_time_left[0][i] = temp += data_pack[0][i+1];
+		//}
 		//inicjalizacja grafu z czasami od prawej do lewej
-		for(unsigned i=0, temp=0; i<n; ++i){
-			data_pack_time_right[0][i] = temp += data_pack[0][n-i-1];
-		}
+		//for(unsigned i=0, temp=0; i<n; ++i){
+		//	data_pack_time_right[0][i] = temp += data_pack[0][n-i-1];
+		//}
 		
 		//tutaj to se sprawdz
 		//tools::c_max_left(data_pack, data_pack_time_left, 0, n);
-		//tools::c_max_right(data_pack, data_pack_time_right, 0, n);
+		tools::c_max_right(data_pack, data_pack_time_right, 0, n);
 		
 		for (unsigned i=0, time=0; data_pack_queue.size(); ++i){
 			data_pack.insert(data_pack.begin(), data_pack_queue.top());
