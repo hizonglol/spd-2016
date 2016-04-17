@@ -117,15 +117,9 @@ namespace tools {
 		if(rebuild_index == 0){
 			for(unsigned i=0, temp=0; i<n; ++i){
 				data_pack_time_left[0][i] = temp += data_pack[0][i+1];
-<<<<<<< HEAD
 //				std::cout << data_pack_time_left[0][i] << ' ';
 			}
 //			std::cout << std::endl;
-=======
-				std::cout << data_pack_time_left[0][i] << ' ';
-			}
-			std::cout << std::endl;
->>>>>>> origin/cw3
 			++rebuild_index;
 		}
 	
@@ -135,28 +129,16 @@ namespace tools {
 			for(unsigned i=rebuild_index; i<data_pack.size(); ++i){
 				data_pack_time_left[i][0] = data_pack_time_left[i-1][0] + data_pack[i][1];
 				
-<<<<<<< HEAD
 //				std::cout << data_pack_time_left[i][0] << ' ';
-=======
-				std::cout << data_pack_time_left[i][0] << ' ';
->>>>>>> origin/cw3
 				
 				for(unsigned j=1; j<n; ++j){
 					data_pack_time_left[i][j] = data_pack[i][j+1] + std::max(data_pack_time_left[i-1][j], data_pack_time_left[i][j-1]);
 					
-<<<<<<< HEAD
 //				std::cout << data_pack_time_left[i][j] << ' ';
 				}
 //				std::cout << std::endl;
 			}
 //			std::cout << std::endl;
-=======
-				std::cout << data_pack_time_left[i][j] << ' ';
-				}
-				std::cout << std::endl;
-			}
-			std::cout << std::endl;
->>>>>>> origin/cw3
 		}
 	}
 	
@@ -167,15 +149,9 @@ namespace tools {
 		if(rebuild_index == 0){
 			for(unsigned i=0, temp=0; i<n; ++i){
 				data_pack_time_right[0][i] = temp += data_pack[data_pack.size()-1][n-i];
-<<<<<<< HEAD
 //				std::cout << data_pack_time_right[0][i] << ' ';
 			}
 //			std::cout << std::endl;
-=======
-				std::cout << data_pack_time_right[0][i] << ' ';
-			}
-			std::cout << std::endl;
->>>>>>> origin/cw3
 			++rebuild_index;
 		}
 	
@@ -183,28 +159,16 @@ namespace tools {
 			for(unsigned i=rebuild_index; i<data_pack.size(); ++i){
 				data_pack_time_right[i][0] = data_pack_time_right[i-1][0] + data_pack[data_pack.size()-i-1][n];
 				
-<<<<<<< HEAD
 //				std::cout << data_pack_time_right[i][0] << ' ';
-=======
-				std::cout << data_pack_time_right[i][0] << ' ';
->>>>>>> origin/cw3
 				
 				for(unsigned j=1; j<n; ++j){
 					data_pack_time_right[i][j] = data_pack[data_pack.size()-i-1][n-j] + std::max(data_pack_time_right[i-1][j], data_pack_time_right[i][j-1]);
 					
-<<<<<<< HEAD
 //				std::cout << data_pack_time_right[i][j] << ' ';
 				}
 //				std::cout << std::endl;
 			}
 //			std::cout << std::endl;
-=======
-				std::cout << data_pack_time_right[i][j] << ' ';
-				}
-				std::cout << std::endl;
-			}
-			std::cout << std::endl;
->>>>>>> origin/cw3
 		}
 	}
 	

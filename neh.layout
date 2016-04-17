@@ -1,8 +1,7 @@
 [Editors]
 Order=0,1
-Focused=1
+Focused=0
 [Editor_0]
-<<<<<<< HEAD
 <<<<<<< HEAD
 CursorCol=27
 CursorRow=117
@@ -12,16 +11,6 @@ LeftChar=1
 CursorCol=15
 CursorRow=171
 TopLine=146
-=======
-CursorCol=3
-CursorRow=57
-TopLine=31
-LeftChar=1
-[Editor_1]
-CursorCol=52
-CursorRow=162
-TopLine=128
->>>>>>> origin/cw3
 =======
 CursorCol=3
 CursorRow=33
