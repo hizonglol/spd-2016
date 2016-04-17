@@ -1,0 +1,363 @@
+Dane nr 0
+Czas 32
+
+Dane nr 1
+Czas 1286
+
+Dane nr 2
+Czas 1365
+
+Dane nr 3
+Czas 1159
+
+Dane nr 4
+Czas 1325
+
+Dane nr 5
+Czas 1305
+
+Dane nr 6
+Czas 1228
+
+Dane nr 7
+Czas 1269
+
+Dane nr 8
+Czas 1223
+
+Dane nr 9
+Czas 1270
+
+Dane nr 10
+Czas 1151
+
+Dane nr 11
+Czas 1704
+
+Dane nr 12
+Czas 1729
+
+Dane nr 13
+Czas 1613
+
+Dane nr 14
+Czas 1462
+
+Dane nr 15
+Czas 1502
+
+Dane nr 16
+Czas 1580
+
+Dane nr 17
+Czas 1562
+
+Dane nr 18
+Czas 1609
+
+Dane nr 19
+Czas 1678
+
+Dane nr 20
+Czas 1653
+
+Dane nr 21
+Czas 2410
+
+Dane nr 22
+Czas 2150
+
+Dane nr 23
+Czas 2411
+
+Dane nr 24
+Czas 2262
+
+Dane nr 25
+Czas 2379
+
+Dane nr 26
+Czas 2355
+
+Dane nr 27
+Czas 2362
+
+Dane nr 28
+Czas 2249
+
+Dane nr 29
+Czas 2320
+
+Dane nr 30
+Czas 2277
+
+Dane nr 31
+Czas 2733
+
+Dane nr 32
+Czas 2843
+
+Dane nr 33
+Czas 2630
+
+Dane nr 34
+Czas 2782
+
+Dane nr 35
+Czas 2868
+
+Dane nr 36
+Czas 2850
+
+Dane nr 37
+Czas 2758
+
+Dane nr 38
+Czas 2721
+
+Dane nr 39
+Czas 2576
+
+Dane nr 40
+Czas 2790
+
+Dane nr 41
+Czas 3135
+
+Dane nr 42
+Czas 3032
+
+Dane nr 43
+Czas 3009
+
+Dane nr 44
+Czas 3198
+
+Dane nr 45
+Czas 3160
+
+Dane nr 46
+Czas 3178
+
+Dane nr 47
+Czas 3277
+
+Dane nr 48
+Czas 3140
+
+Dane nr 49
+Czas 3002
+
+Dane nr 50
+Czas 3257
+
+Dane nr 51
+Czas 4220
+
+Dane nr 52
+Czas 3921
+
+Dane nr 53
+Czas 3927
+
+Dane nr 54
+Czas 3969
+
+Dane nr 55
+Czas 3890
+
+Dane nr 56
+Czas 3945
+
+Dane nr 57
+Czas 3952
+
+Dane nr 58
+Czas 3920
+
+Dane nr 59
+Czas 3952
+
+Dane nr 60
+Czas 4079
+
+Dane nr 61
+Czas 5519
+
+Dane nr 62
+Czas 5348
+
+Dane nr 63
+Czas 5219
+
+Dane nr 64
+Czas 5023
+
+Dane nr 65
+Czas 5266
+
+Dane nr 66
+Czas 5139
+
+Dane nr 67
+Czas 5259
+
+Dane nr 68
+Czas 5131
+
+Dane nr 69
+Czas 5489
+
+Dane nr 70
+Czas 5341
+
+Dane nr 71
+Czas 5846
+
+Dane nr 72
+Czas 5451
+
+Dane nr 73
+Czas 5768
+
+Dane nr 74
+Czas 5949
+
+Dane nr 75
+Czas 5637
+
+Dane nr 76
+Czas 5395
+
+Dane nr 77
+Czas 5704
+
+Dane nr 78
+Czas 5760
+
+Dane nr 79
+Czas 6032
+
+Dane nr 80
+Czas 5920
+
+Dane nr 81
+Czas 6541
+
+Dane nr 82
+Czas 6523
+
+Dane nr 83
+Czas 6612
+
+Dane nr 84
+Czas 6577
+
+Dane nr 85
+Czas 6562
+
+Dane nr 86
+Czas 6664
+
+Dane nr 87
+Czas 6716
+
+Dane nr 88
+Czas 6782
+
+Dane nr 89
+Czas 6677
+
+Dane nr 90
+Czas 6695
+
+Dane nr 91
+Czas 10942
+
+Dane nr 92
+Czas 10716
+
+Dane nr 93
+Czas 11025
+
+Dane nr 94
+Czas 11057
+
+Dane nr 95
+Czas 10630
+
+Dane nr 96
+Czas 10456
+
+Dane nr 97
+Czas 10989
+
+Dane nr 98
+Czas 10829
+
+Dane nr 99
+Czas 10556
+
+Dane nr 100
+Czas 10807
+
+Dane nr 101
+Czas 11558
+
+Dane nr 102
+Czas 11675
+
+Dane nr 103
+Czas 11852
+
+Dane nr 104
+Czas 11803
+
+Dane nr 105
+Czas 11651
+
+Dane nr 106
+Czas 11665
+
+Dane nr 107
+Czas 11833
+
+Dane nr 108
+Czas 11913
+
+Dane nr 109
+Czas 11730
+
+Dane nr 110
+Czas 11869
+
+Dane nr 111
+Czas 26670
+
+Dane nr 112
+Czas 27279
+
+Dane nr 113
+Czas 26848
+
+Dane nr 114
+Czas 27057
+
+Dane nr 115
+Czas 26727
+
+Dane nr 116
+Czas 26992
+
+Dane nr 117
+Czas 26797
+
+Dane nr 118
+Czas 27239
+
+Dane nr 119
+Czas 26714
+
+Dane nr 120
+Czas 26984
+
