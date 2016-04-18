@@ -103,6 +103,12 @@ int main(){
 		 	data_pack.insert(data_pack.begin()+temp_index, data_temp[0]);
 		 	tools::c_max_left(data_pack, data_pack_time_left, temp_index, n);
 			tools::c_max_right(data_pack, data_pack_time_right, data_pack.size()-1-temp_index, n);
+			
+			//cout << "Indeksy zadan \n";
+			//for(i=0; i<data_pack.size(); ++i){
+			//    cout << data_pack[i][0] << " ";
+			//}
+			//cout << endl << endl;
 		}
 		
 		//c_max = tools::c_max(data_pack);
