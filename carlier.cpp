@@ -6,6 +6,8 @@
 #include "tools.h"
 
 using namespace std;
+
+	
 /* jak powinno wyjsc dla tych danych:
 Schrage:
 1. 13981   
@@ -41,10 +43,10 @@ int main() {
 	tools::load(zad1_length, zad1, wejscie1);
 	
 	tools::carlier(zad1_length, zad1, U1);
-	cout << "Czas Carliera dla danych 1: " << tools::c_max(zad1_length, zad1) << endl;
+	cout << "Czas Carliera dla danych 1: " << tools::c_max(zad1_length, zad_temp) << endl;
 	
 	//cout << tools::preschrage(zad1_length,zad1) << endl;
-	tools::print(zad1);
+	tools::print_all(zad_temp);
 	
 	/*
 	tools::load(zad2_length, zad2, wejscie2);
@@ -68,6 +70,6 @@ int main() {
 	tools::save(zad1); //zapisujemy do pliku permutacje zadan
 	tools::clean(zad1_length, zad1); //sprzatamy wektory
 	
-	tools::pause();
+	//tools::pause();
 	return 0;
 }
