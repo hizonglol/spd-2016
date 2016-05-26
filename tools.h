@@ -263,25 +263,34 @@ namespace tools {
 	
 	/* wyznaczanie sciezki krytycznej o indeksach a i b *///************************************************************************
 	void set_a_b_index(unsigned const n, std::vector<std::vector<unsigned> > const pi, long unsigned const U, std::vector<unsigned> const c_tasks, unsigned& a_index, unsigned& b_index){
-		unsigned j;
+		unsigned s, j;
 		unsigned sum;
+		a_index = b_index = ~0u;
 		
-		for (j=(n-1); j>0; --j){
+		for (j=0; j<n; ++j){
 			if (c_tasks[j] + pi[j][3] == U){
 				b_index = j;
-				break;
 			}
 		}
+		if (b_index == ~0u) {
+			std::cout << "Bledne b" << std::endl;
+		}
 		
-		sum = 0;
-		for (j=0; j<=b_index; ++j)	sum += pi[j][2];
+
+
 		
 		for (j=0; j<=b_index; ++j){
+			sum = 0;
+			
+			for (s = j; s<=b_index; ++s)	sum += pi[s][2];
+			
 			if (pi[j][1] + sum + pi[b_index][3] == U) {
 				a_index = j;
 				break;
 			}
-			sum -= pi[j][2];
+		}
+		if (a_index == ~0u) {
+			std::cout << "Bledne a" << std::endl;
 		}
 	}
 	
@@ -289,11 +298,10 @@ namespace tools {
 	bool c_exists(std::vector<std::vector<unsigned> > const pi, unsigned const a_index, unsigned const b_index, unsigned& c_index) {
 		bool c_exists = false;
 		
-		for (unsigned j=b_index; j>=a_index; --j){
+		for (unsigned j=a_index; j<=b_index; ++j){
 			if (pi[j][3] < pi[b_index][3]){
 				c_exists = true;
 				c_index = j;
-				break;
 			}
 		}
 	

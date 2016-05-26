@@ -26,7 +26,7 @@ Carlier:
 int main() {
 	vector<vector<unsigned> > zad1;
 	unsigned zad1_length;
-	string wejscie1 = "dane1.txt";
+	string wejscie1 = "dane0.txt";
 	unsigned U1 = ~0u;
 
 	tools::load(zad1_length, zad1, wejscie1);
