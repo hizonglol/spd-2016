@@ -170,34 +170,37 @@ namespace tools {
 	*/
 	
 	/* schrage *///**********************************************************************************
-	int schrage (std::vector< std::vector<unsigned> > & tasks) {
-		unsigned t = 0;
-		unsigned c_max = 0;
-		std::vector<std::vector<unsigned> > pi; //permutacja zadan po sortowaniu
+	int schrage (std::vector< std::vector<unsigned> > & tasks, std::vector<unsigned> & c_tasks) {
+		unsigned t = 0, c_max = 0, i = 0;
+		
+		std::vector<std::vector<unsigned> > pi;
 		
 		std::priority_queue <std::vector<unsigned>, std::vector< std::vector<unsigned> >, compare_r> N; //kolejka min(r)
 		std::priority_queue <std::vector<unsigned>, std::vector< std::vector<unsigned> >, compare_q> G; //kolejka max(q)
 		
 		while (!tasks.empty()) {
-			N.push(tasks.back()); //wrzucamy zadania do kolejki min(r)
-			tasks.pop_back(); //kasujemy zadania do posortowania
+			N.push(tasks.back());
+			tasks.pop_back();
 		}
 		
-		while ((!G.empty()) || (!N.empty())) { //dopoki wszystkie zadania nie zostaly przetworzone
+		while ((!G.empty()) || (!N.empty())) {
 			
-			while ((!N.empty()) && (N.top()[1] <= t)) { //jesli jest zadanie co "p" ma mniejsze od momentu czasowego
-				G.push(N.top()); //wrzucamy nowe zadanie do kolejki max(q)
-				N.pop(); //i kasujemy z kolejki min(r)
+			while ((!N.empty()) && (N.top()[1] <= t)) {
+				G.push(N.top());
+				N.pop();
 			}
 			
-			if (G.empty()) { //jesli nie ma zadnego zadania przygotowanego do przetwarzania
-				t = N.top()[1]; //przesuwamy sie o odpowiedni czas
+			if (G.empty()) {
+				t = N.top()[1];
 			}
 			else {
-			t += G.top()[2]; //przesuwamy sie z czasem "t" do przodu
-			c_max = std::max<int>(c_max, t + G.top()[3]); //zwiekszamy "c_max"
-			pi.push_back(G.top()); //zapisujemy wykonane zadanie w permutacji "pi"
-			G.pop(); //kasujemy zadanie z kolejki max(q)
+			t += G.top()[2];
+			c_max = std::max<int>(c_max, t + G.top()[3]);
+			pi.push_back(G.top());
+			G.pop();
+			
+			c_tasks[i] = t;
+			++i;
 			}
 		}
 		
@@ -259,54 +262,41 @@ namespace tools {
 	*/
 	
 	/* wyznaczanie sciezki krytycznej o indeksach a i b *///************************************************************************
-	void set_a_b_c_index(unsigned const n, std::vector<std::vector<unsigned> > const pi, long unsigned const U, unsigned & a_index, unsigned & b_index){
-		a_index = 0;
-		b_index = 0;
+	void set_a_b_index(unsigned const n, std::vector<std::vector<unsigned> > const pi, long unsigned const U, std::vector<unsigned> const c_tasks, unsigned& a_index, unsigned& b_index){
 		unsigned j;
 		unsigned sum;
-		unsigned s;
-		unsigned t_p = 0;
-		unsigned c_temp = 0;
 		
-		std::cout << "Wyznaczam a i b." << std::endl;
-		
-		for (j=0; j<n; j++){ //przeszukujemy wszystkie zadania z permutacji "pi"
-			t_p = std::max<unsigned>(t_p,pi[j][1]) + pi[j][2];
-			c_temp = std::max<unsigned>(t_p + pi[j][3], c_temp); //tutaj zwiekszam sobie c_max dla j-tego elementu
-			
-			if (t_p + pi[j][3] == U){
+		for (j=(n-1); j>0; --j){
+			if (c_tasks[j] + pi[j][3] == U){
 				b_index = j;
+				break;
 			}
 		}
-		std::cout << "Indeks b: "  << b_index << std::endl;
 		
-		std::cout << "Wyznaczam a." << std::endl;
+		sum = 0;
+		for (j=0; j<=b_index; ++j)	sum += pi[j][2];
 		
-		for (j=0; j<=b_index; j++){ //przesuwamy sie po wszystkich elementach wektora
-			sum = 0;
-			for (s=j; s<=b_index; s++)	sum += pi[s][2]; //suma "p" od 0 do "b_index"
-			if (pi[j][1] + sum + pi[b_index][3] == U) { //sprawdzamy warunek
+		for (j=0; j<=b_index; ++j){
+			if (pi[j][1] + sum + pi[b_index][3] == U) {
 				a_index = j;
-				std::cout << "Indeks a: " << a_index << std::endl;
-				break; //pierwsze znalezione "a_index" konczy petle
+				break;
 			}
-			
-			sum -= pi[j][2]; //zmieniamy przedzial sumy kiedy zmienia sie "a"
+			sum -= pi[j][2];
 		}
 	}
 	
 	/* wyznaczanie c *///****************************************************************************
 	bool c_exists(std::vector<std::vector<unsigned> > const pi, unsigned const a_index, unsigned const b_index, unsigned& c_index) {
-		bool c_exists = false; //c domyslnie nie istnieje
-		std::cout << a_index;
+		bool c_exists = false;
 		
-		for (unsigned j=a_index + 1; j<b_index; ++j){ //poruszamy sie po sciezce krytycznej
-			if (pi[j][3] < pi[b_index][3]){ //szukamy zadania o najwyzszym indeksie poprzedzajacego "b_index" z krotszym "q" od "b_index"
-				c_exists = true; //c istnieje
-				c_index = j; //jesli znalezione zadanie c to zapisujemy jego indeks w "c_index"
+		for (unsigned j=b_index; j>=a_index; --j){
+			if (pi[j][3] < pi[b_index][3]){
+				c_exists = true;
+				c_index = j;
+				break;
 			}
 		}
-		
+	
 		return c_exists;
 	}
 	
@@ -314,14 +304,17 @@ namespace tools {
 	int carlier(unsigned const n, std::vector< std::vector<unsigned> > tasks, unsigned UB){
 		long unsigned U, LB;
 		unsigned r_old, q_old, id;
-		unsigned r_prim = 9999999;
-		unsigned p_prim = 9999999;
-		unsigned q_prim = 0;
+		unsigned r_prim = ~0u;
+		unsigned p_prim = 0;
+		unsigned q_prim = ~0u;
 		unsigned a_index, b_index, c_index;
+		
+		std::vector<unsigned> c_tasks;
+		c_tasks.resize(tasks.size());
 		
 		std::vector<std::vector<unsigned> > pi = tasks;
 		
-		U = schrage(pi);
+		U = schrage(pi, c_tasks);
 		std::cout << "Carlier 1." << std::endl;
 		
 		
@@ -333,11 +326,10 @@ namespace tools {
 		std::cout << "Carlier 2." << std::endl;
 		
 		
-		set_a_b_c_index(n, tasks, U, a_index, b_index);
+		set_a_b_index(n, tasks, U, c_tasks, a_index, b_index);
 		std::cout << "Carlier 3." << std::endl;
 		
-
-		if (c_exists(tasks, a_index, b_index, c_index)) std::cout << "Indeks c: " << c_index << std::endl;
+		
 		if (!c_exists(tasks, a_index, b_index, c_index)){
 			std::cout << "C does not exist.\n";
 			std::cout << c_max(n, tasks) << std::endl;
@@ -347,7 +339,6 @@ namespace tools {
 		std::cout << "Carlier 4." << std::endl;
 		
 		
-		p_prim = 0;
 		for (unsigned i=(c_index+1); i<=b_index; ++i) {
 			if (tasks[i][1] < r_prim) r_prim = tasks[i][1];
 			if (tasks[i][3] < q_prim) q_prim = tasks[i][3];
@@ -368,10 +359,9 @@ namespace tools {
 	
 		
 		if (LB < UB) {
-//			std::cout << "LB: " << LB << std::endl; 
 			std::cout << "Carlier 8." << std::endl; 
-			//pause();
 			carlier(n, tasks, UB);
+			pause();
 		}
 		std::cout << "Carlier 9." << std::endl;
 		
@@ -383,7 +373,6 @@ namespace tools {
 		
 		std::cout << "Carlier 10." << std::endl;
 		
-//		std::cout << tasks[c_index][3] << " " << q_prim+p_prim << std::endl;
 		q_old = tasks[c_index][3];
 		tasks[c_index][3] = std::max<unsigned>(tasks[c_index][3], q_prim+p_prim);
 				
@@ -394,10 +383,9 @@ namespace tools {
 		
 		
 		if (LB < UB){
-//			std::cout << "LB: " << LB << std::endl; 
 			std::cout << "Carlier 13." << std::endl; 
-			//pause();
 			carlier(n, tasks, UB);
+			pause();
 		}
   		std::cout << "Carlier 14." << std::endl; 
   		
