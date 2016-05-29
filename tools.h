@@ -9,6 +9,8 @@
 
 std::vector<std::vector<unsigned> > zad_temp;
 
+unsigned best_U = ~0u;
+
 namespace tools {
 
 	//PAUSE *****************************************************************************************
@@ -262,14 +264,14 @@ namespace tools {
 	*/
 	
 	/* wyznaczanie sciezki krytycznej o indeksach a i b *///************************************************************************
-	void set_a_b_index(unsigned const n, std::vector<std::vector<unsigned> > const pi, long unsigned const U, std::vector<unsigned> const c_tasks, unsigned& a_index, unsigned& b_index){
-		unsigned s, j;
-		unsigned sum;
+	void set_a_b_index(unsigned const& n, std::vector<std::vector<unsigned> > const& pi, long unsigned const& U, std::vector<unsigned> const& c_tasks, unsigned& a_index, unsigned& b_index){
+		unsigned s, j, sum;
 		a_index = b_index = ~0u;
 		
-		for (j=0; j<n; ++j){
+		for (j=n-1; j; --j){
 			if (c_tasks[j] + pi[j][3] == U){
 				b_index = j;
+				break;
 			}
 		}
 		if (b_index == ~0u) {
@@ -277,17 +279,15 @@ namespace tools {
 		}
 		
 
-
+		for (s=0, sum=0; s<=b_index; ++s)	sum += pi[s][2];
 		
 		for (j=0; j<=b_index; ++j){
-			sum = 0;
-			
-			for (s = j; s<=b_index; ++s)	sum += pi[s][2];
 			
 			if (pi[j][1] + sum + pi[b_index][3] == U) {
 				a_index = j;
 				break;
 			}
+			sum -= pi[j][2];
 		}
 		if (a_index == ~0u) {
 			std::cout << "Bledne a" << std::endl;
@@ -295,13 +295,14 @@ namespace tools {
 	}
 	
 	/* wyznaczanie c *///****************************************************************************
-	bool c_exists(std::vector<std::vector<unsigned> > const pi, unsigned const a_index, unsigned const b_index, unsigned& c_index) {
+	bool c_exists(std::vector<std::vector<unsigned> > const &pi, unsigned const &a_index, unsigned const &b_index, unsigned& c_index) {
 		bool c_exists = false;
 		
-		for (unsigned j=a_index; j<=b_index; ++j){
+		for (unsigned j=b_index; j>=a_index; --j){
 			if (pi[j][3] < pi[b_index][3]){
 				c_exists = true;
 				c_index = j;
+				break;
 			}
 		}
 	
@@ -323,28 +324,29 @@ namespace tools {
 		std::vector<std::vector<unsigned> > pi = tasks;
 		
 		U = schrage(pi, c_tasks);
-		std::cout << "Carlier 1." << std::endl;
+		//std::cout << "Carlier 1." << std::endl;
 		
 		
 		if(U < UB){
 			UB = U;
 			tasks = pi;
-			std::cout << "Mam nowe UB: " << UB << std::endl;
+			if(UB < best_U) std::cout << "Mam nowe UB: " << UB << std::endl;
+			print(tasks);
 		}
-		std::cout << "Carlier 2." << std::endl;
+		//std::cout << "Carlier 2." << std::endl;
 		
 		
 		set_a_b_index(n, tasks, U, c_tasks, a_index, b_index);
-		std::cout << "Carlier 3." << std::endl;
+		//std::cout << "Carlier 3." << std::endl;
 		
 		
 		if (!c_exists(tasks, a_index, b_index, c_index)){
 			std::cout << "C does not exist.\n";
-			std::cout << c_max(n, tasks) << std::endl;
-			print_all(tasks);
+			//std::cout << c_max(n, tasks) << std::endl;
+			//print_all(tasks);
 			return 0;
 		}
-		std::cout << "Carlier 4." << std::endl;
+		//std::cout << "Carlier 4." << std::endl;
 		
 		
 		for (unsigned i=(c_index+1); i<=b_index; ++i) {
@@ -352,58 +354,58 @@ namespace tools {
 			if (tasks[i][3] < q_prim) q_prim = tasks[i][3];
 			p_prim += tasks[i][2];
 		}
-		std::cout << "Carlier 5." << std::endl;
+		//std::cout << "Carlier 5." << std::endl;
 		
-		std::cout << "Aktualny czas: " << c_max(n, tasks) << std::endl;
+		//std::cout << "Aktualny czas: " << c_max(n, tasks) << std::endl;
 				
 		r_old = tasks[c_index][1];
 		tasks[c_index][1] = std::max<unsigned>(tasks[c_index][1], r_prim+p_prim);
 		id = tasks[c_index][0];
-		std::cout << "Carlier 6." << std::endl;
+		//std::cout << "Carlier 6." << std::endl;
 		
-		print(tasks);
+		//print(tasks);
 		LB = preschrage(n, tasks);
-		std::cout << "Carlier 7." << std::endl;
+		//std::cout << "Carlier 7." << std::endl;
 	
 		
 		if (LB < UB) {
-			std::cout << "Carlier 8." << std::endl; 
+			//std::cout << "Carlier 8." << std::endl; 
 			carlier(n, tasks, UB);
-			pause();
+			//pause();
 		}
-		std::cout << "Carlier 9." << std::endl;
+		//std::cout << "Carlier 9." << std::endl;
 		
 		for (unsigned i = 0; i < tasks.size(); ++i){
 			if(tasks[i][0] == id)	tasks[i][1] = r_old;
 		} 
 
-		std::cout << "Aktualny czas 1: " << c_max(n, tasks) << std::endl;
+		//std::cout << "Aktualny czas 1: " << c_max(n, tasks) << std::endl;
 		
-		std::cout << "Carlier 10." << std::endl;
+		//std::cout << "Carlier 10." << std::endl;
 		
 		q_old = tasks[c_index][3];
 		tasks[c_index][3] = std::max<unsigned>(tasks[c_index][3], q_prim+p_prim);
 				
-		std::cout << "Carlier 11." << std::endl;
+		//std::cout << "Carlier 11." << std::endl;
 		
 		LB = preschrage(n, tasks);
-		std::cout << "Carlier 12." << std::endl;
+		//std::cout << "Carlier 12." << std::endl;
 		
 		
 		if (LB < UB){
-			std::cout << "Carlier 13." << std::endl; 
+			//std::cout << "Carlier 13." << std::endl; 
 			carlier(n, tasks, UB);
-			pause();
+			//pause();
 		}
-  		std::cout << "Carlier 14." << std::endl; 
+  		//std::cout << "Carlier 14." << std::endl; 
   		
 		for (unsigned i = 0; i < tasks.size(); ++i){
 			if(tasks[i][0] == id)	tasks[i][3] = q_old;
 		} 
 		
-		std::cout << "Aktualny czas 2: " << c_max(n, tasks) << std::endl;
+		//std::cout << "Aktualny czas 2: " << c_max(n, tasks) << std::endl;
 				
-  		std::cout << "Carlier 15." << std::endl; 
+  		//std::cout << "Carlier 15." << std::endl; 
 		
 		return -1;
 	}

@@ -23,10 +23,19 @@ Carlier:
 4. 3191
 */
 
+
 int main() {
 	vector<vector<unsigned> > zad1;
 	unsigned zad1_length;
 	string wejscie1 = "dane0.txt";
+	//string wejscie1 = "dane1.txt";
+	//string wejscie1 = "dane2.txt";
+	//string wejscie1 = "dane3.txt";
+	//string wejscie1 = "dane4.txt";
+	//string wejscie1 = "dane5.txt";
+	//string wejscie1 = "dane6.txt";
+	//string wejscie1 = "dane7.txt";
+	//string wejscie1 = "dane8.txt";
 	unsigned U1 = ~0u;
 
 	tools::load(zad1_length, zad1, wejscie1);
