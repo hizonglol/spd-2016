@@ -321,15 +321,13 @@ namespace tools {
 		std::vector<unsigned> c_tasks;
 		c_tasks.resize(tasks.size());
 		
-		std::vector<std::vector<unsigned> > pi = tasks;
 		
-		U = schrage(pi, c_tasks);
+		U = schrage(tasks, c_tasks);
 		//std::cout << "Carlier 1." << std::endl;
 		
 		
 		if(U < UB){
 			UB = U;
-			tasks = pi;
 			if(UB < best_U) std::cout << "Mam nowe UB: " << UB << std::endl;
 			print(tasks);
 		}
